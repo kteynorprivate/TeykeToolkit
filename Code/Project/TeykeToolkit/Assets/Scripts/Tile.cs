@@ -24,11 +24,6 @@ public class Tile : MonoBehaviour {
             new Vector3(width, 0, -height),
             new Vector3(width, 0, height),
             new Vector3(-width, 0, height) };
-        //m.normals = new Vector3[] {
-        //    new Vector3(0,-1,0), 
-        //    new Vector3(0,-1,0), 
-        //    new Vector3(0,-1,0), 
-        //    new Vector3(0,-1,0) };
         m.uv = new Vector2[] { 
             new Vector2(0,0),
             new Vector2(0,1),

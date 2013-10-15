@@ -44,7 +44,9 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\MapEditor.cs" />
+     <Compile Include="Assets\Editor\ExtensionMethods.cs" />
+     <Compile Include="Assets\Editor\Map\MapCreationDialog.cs" />
+     <Compile Include="Assets\Editor\Map\MapEditor.cs" />
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
