@@ -3,18 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class MapTilePreview
-{
-    public static MapTilePreview SelectedTile;
-    public static float PreviewSize = 75;
-    public Texture2D Texture;
-    public Rect PreviewPosition;
 
-    public bool IsSelectedTile
-    {
-        get { return MapTilePreview.SelectedTile == this; }
-    }
-}
 
 public class MapEditor : EditorWindow
 {
@@ -38,14 +27,38 @@ public class MapEditor : EditorWindow
         MapEditor window = EditorWindow.GetWindow<MapEditor>();
         Textures = new List<MapTilePreview>();
     }
-    
+
+    void OnSelectionChange()
+    {
+        Repaint();
+    }
+
     void OnGUI()
     {
+        if (Selection.objects.Length <= 0)
+        {
+            EditorGUILayout.LabelField("Map is not currently selected.");
+            return;
+        }
+        bool mapSelected = false;
+        foreach (GameObject go in Selection.gameObjects)
+        {
+            if (go.GetComponent<Map>() != null) mapSelected = true;
+        }
+        if (!mapSelected)
+        {
+            EditorGUILayout.LabelField("Map is not currently selected.");
+            return;
+        }
+
         // toggle the tiles to editable or not.
         bool lockMapTiles = !MapInstance.TilesEditable;
         lockMapTiles = EditorGUILayout.Toggle("Lock Map Tiles", lockMapTiles);
         if (lockMapTiles == MapInstance.TilesEditable)
+        {
             MapInstance.TilesEditable = !lockMapTiles;
+            EditorApplication.RepaintHierarchyWindow();
+        }
 
         EditorGUILayout.BeginVertical();
         // selector for the map textures
@@ -80,25 +93,28 @@ public class MapEditor : EditorWindow
                 if (mtp.PreviewPosition.Contains(e.mousePosition))
                 {
                     MapTilePreview.SelectedTile = mtp;
+                    SetAllTileTextures();
                     e.Use();
                 }
             }
         }
 
-        // make texture preview's draggable (to drag onto map tiles
-        foreach (MapTilePreview t in Textures)
-        {
-            //Event e = Event.current;
-            //if(textureRect.Offset(position.Position()).Contains(e.mousePosition) && 
-            //    (e.type == EventType.MouseDown || e.type == EventType.MouseDrag))
-            //{
-            //    //Debug.Log(t.name);
-            //    //DragAndDrop.StartDrag(t.name);
-            //    e.Use();
-            //}
-        }
-
         EditorGUILayout.EndVertical();
+    }
+
+    void OnSceneGUI()
+    {
+
+    }
+
+    private void SetAllTileTextures()
+    {
+        foreach (GameObject tile in MapInstance.Tiles)
+        {
+            // TODO: Make sure this sets it for the game too-- not just the editor.
+            tile.renderer.sharedMaterial.mainTexture = MapTilePreview.SelectedTile.Texture;
+            //tile.renderer.material.mainTexture = MapTilePreview.SelectedTile.Texture;
+        }
     }
 
     private bool AddTexture(Texture2D t)

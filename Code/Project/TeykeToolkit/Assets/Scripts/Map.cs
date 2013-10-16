@@ -2,11 +2,27 @@
 using UnityEngine;
 using System.Collections;
 
-public sealed class Map : MonoBehaviour 
+public sealed class MapTilePreview
+{
+    public static MapTilePreview SelectedTile;
+    public static float PreviewSize = 75;
+    public Texture2D Texture;
+    public Rect PreviewPosition;
+
+    public bool IsSelectedTile
+    {
+        get { return MapTilePreview.SelectedTile == this; }
+    }
+}
+
+public sealed class Map : MonoBehaviour
 {
     public GameObject[] Tiles;
     public int Width;
     public int Height;
+
+    public Texture2D[] Textures;
+    public int SelectedTexture;
 
     private bool tilesEditable;
     public bool TilesEditable
@@ -111,7 +127,8 @@ public sealed class Map : MonoBehaviour
             for (int c = 0; c < Width; c++)
             {
                 Tiles[(r * Width) + c] = GameObject.CreatePrimitive(PrimitiveType.Quad);
-                GameObject tile = Tiles[(r * Width) + c];                
+                GameObject tile = Tiles[(r * Width) + c];
+                tile.AddComponent<Tile>();
                 tile.name = "tile_" + r + "_" + c;
                 tile.transform.Rotate(90, 0, 0);
                 tile.transform.position = new Vector3(xoffset, 0, zoffset);

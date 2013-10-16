@@ -47,6 +47,8 @@
      <Compile Include="Assets\Editor\ExtensionMethods.cs" />
      <Compile Include="Assets\Editor\Map\MapCreationDialog.cs" />
      <Compile Include="Assets\Editor\Map\MapEditor.cs" />
+     <Compile Include="Assets\Editor\Map\MapInspector.cs" />
+     <Compile Include="Assets\Editor\Map\TileInspector.cs" />
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>
