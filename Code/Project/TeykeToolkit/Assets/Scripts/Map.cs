@@ -1,6 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public sealed class MapTilePreview
 {
@@ -21,8 +23,33 @@ public sealed class Map : MonoBehaviour
     public int Width;
     public int Height;
 
-    public Texture2D[] Textures;
-    public int SelectedTexture;
+    public int SelectedMaterialIndex;
+    public List<Material> TileMaterials;
+    public Material SelectedMaterial
+    {
+        get
+        {
+            if (SelectedMaterialIndex < TileMaterials.Count && SelectedMaterialIndex >= 0)
+                return TileMaterials[SelectedMaterialIndex];
+            else return null;
+        }
+    }
+    public Texture[] TileTextures
+    {
+        get
+        {
+            return (from mat in TileMaterials select mat.mainTexture).ToArray();
+        }
+    }
+    public Texture SelectedTexture
+    {
+        get
+        {
+            if (SelectedMaterialIndex < TileMaterials.Count && SelectedMaterialIndex >= 0)
+                return TileTextures[SelectedMaterialIndex];
+            else return null;
+        }
+    }
 
     private bool tilesEditable;
     public bool TilesEditable
@@ -104,6 +131,8 @@ public sealed class Map : MonoBehaviour
     {
         Width = w;
         Height = h;
+        SelectedMaterialIndex = 0;
+        TileMaterials = new List<Material>();
     }
 
     public void GenerateMap(int width, int height)
