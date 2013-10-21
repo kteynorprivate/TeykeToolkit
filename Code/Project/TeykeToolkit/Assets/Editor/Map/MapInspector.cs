@@ -17,61 +17,62 @@ public class MapInspector : Editor
         }
     }
 
-    bool showTextures = true;
-
-    //bool painting = false;
+    bool paintTextures = true;
 
     public override void OnInspectorGUI()
     {
-        Tools.current = Tool.None;
-
         // toggle tiles in hierarchy
         TargetMap.TilesEditable = EditorGUILayout.Toggle("Tiles visible in hierarchy:", TargetMap.TilesEditable);
         
         
         // texture selection
-        showTextures = EditorGUILayout.Foldout(showTextures, "Tile Textures");
-        if(showTextures)
+        paintTextures = EditorGUILayout.Foldout(paintTextures, "Paint Textures");
+        if (paintTextures && TargetMap.Textures != null)
         {
-            TargetMap.SelectedTexture = GUILayout.SelectionGrid(TargetMap.SelectedTexture, TargetMap.Textures, ((Screen.width - 10) / 128) + 1, 
-                GUILayout.MaxWidth(128), 
-                GUILayout.MaxHeight(128),
-                GUILayout.ExpandWidth(false),
-                GUILayout.ExpandHeight(true));
+            //Tools.current = Tool.None;
+            TargetMap.SelectedTexture = GUILayout.SelectionGrid(TargetMap.SelectedTexture, TargetMap.Textures, 
+                ((Screen.width - 10) / 64) + 1,
+                //GUILayout.MaxWidth(64), 
+                //GUILayout.MaxHeight(64),
+                //GUILayout.MinWidth(64),
+                //GUILayout.MinHeight(64),
+                GUILayout.ExpandWidth(true),
+                GUILayout.ExpandHeight(false));
         }
 
         base.OnInspectorGUI();
         
+        
+
         EditorApplication.RepaintHierarchyWindow();
     }
 
     public void OnSceneGUI()
     {
-        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-
         Event e = Event.current;
+        //HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+        //HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Keyboard));
 
-        if (e.type == EventType.MouseDown && e.button == 1)
+        if (e.button == 0 && (e.type == EventType.MouseDrag || e.type == EventType.MouseDown) && !(e.modifiers == EventModifiers.Alt || e.modifiers == EventModifiers.Shift))
         {
-            Debug.Log(HandleUtility.GUIPointToWorldRay(e.mousePosition));
-        }
 
-        if (e.type == EventType.MouseDrag || (e.type == EventType.MouseDown && e.button == 0))
-        {
-            Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
-            foreach (GameObject tile in TargetMap.Tiles)
+            //Ray r = HandleUtility.GUIPointToWorldRay(e.mousePosition);
+            RaycastHit hitinfo;
+            if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(e.mousePosition), out hitinfo, 100))
             {
-                RaycastHit hitinfo;
-                if (Physics.Raycast(r, out hitinfo, 100))
+                if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
                 {
-                    if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
-                    {
-                        hitinfo.collider.gameObject.renderer.material.mainTexture = TargetMap.Textures[TargetMap.SelectedTexture];
-                    }
-                    break;
+                    Undo.RegisterUndo(hitinfo.collider.gameObject.renderer, "apply tile texture");
+
+                    // TODO: Figure out how to fix this.
+                    Material mat = new Material(hitinfo.collider.gameObject.renderer.sharedMaterial);
+                    mat.mainTexture = TargetMap.Textures[TargetMap.SelectedTexture];
+                    //hitinfo.collider.gameObject.renderer.sharedMaterial.mainTexture = TargetMap.Textures[TargetMap.SelectedTexture];
+                    hitinfo.collider.gameObject.renderer.material = mat;
+
+                    e.Use();
                 }
             }
-            e.Use();
         }
     }
 }

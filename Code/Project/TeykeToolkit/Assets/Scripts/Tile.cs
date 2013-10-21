@@ -3,4 +3,5 @@ using System.Collections;
 
 public class Tile : MonoBehaviour 
 {
+    public bool Pathable;
 }

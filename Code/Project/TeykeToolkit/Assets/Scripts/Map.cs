@@ -138,6 +138,7 @@ public sealed class Map : MonoBehaviour
                 tile.collider.hideFlags = HideFlags.HideInInspector;
                 tile.GetComponent<MeshFilter>().hideFlags = HideFlags.HideInInspector;
                 tile.hideFlags = HideFlags.HideInHierarchy;
+                tile.isStatic = true;
 
                 xoffset += 1;
             }
