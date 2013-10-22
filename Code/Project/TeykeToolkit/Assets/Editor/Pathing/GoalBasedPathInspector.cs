@@ -19,6 +19,7 @@ public class GoalBasedPathInspector : Editor
         base.OnInspectorGUI();
 
         showHeatmap = EditorGUILayout.Toggle("Show Heatmap: ", showHeatmap);
+        showVectorField = EditorGUILayout.Toggle("Show Vector Field: ", showVectorField);
 
         if (GUILayout.Button("Generate Path"))
         {
@@ -29,6 +30,7 @@ public class GoalBasedPathInspector : Editor
     public void OnSceneGUI()
     {
         if (showHeatmap) RenderHeatmap();
+        if (showVectorField) RenderVectorField();
     }
     private void RenderHeatmap()
     {
@@ -42,6 +44,20 @@ public class GoalBasedPathInspector : Editor
                 if (targetPathing.heatmap[c, r] == -1) heat.a = 1;
                 else heat.a = (float)targetPathing.heatmap[c, r] / (float)targetPathing.maxHeatValue;
                 Handles.DrawSolidRectangleWithOutline(targetPathing.map.Tiles_MultiDim[c, r].SceneVerts, heat, heat);
+            }
+        }
+    }
+    private void RenderVectorField()
+    {
+        if (targetPathing.vectorField == null) return;
+
+        for (int r = 0; r < targetPathing.map.Height; r++)
+        {
+            for (int c = 0; c < targetPathing.map.Width; c++)
+            {
+                if (targetPathing.heatmap[c, r] == 01) continue;
+
+                Handles.DrawLine(targetPathing.map.Tiles_MultiDim[c, r].transform.position, targetPathing.map.Tiles_MultiDim[c, r].transform.position + new Vector3(targetPathing.vectorField[c, r].x, 0, targetPathing.vectorField[c, r].y));
             }
         }
     }
