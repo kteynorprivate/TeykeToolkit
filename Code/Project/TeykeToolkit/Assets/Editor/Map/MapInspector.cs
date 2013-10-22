@@ -29,6 +29,7 @@ public class MapInspector : Editor
         }
     }
     static MapInspectorTool currentTool;
+    static PathingType currentPathingType;
 
     static bool showPathingOutlines;
 
@@ -46,6 +47,7 @@ public class MapInspector : Editor
 
         // render the toolbar
         EditorGUILayout.LabelField("Current Tool");
+        MapInspectorTool prevTool = currentTool;
         currentTool = (MapInspectorTool)GUILayout.Toolbar((int)currentTool, System.Enum.GetNames(typeof(MapInspectorTool)));
 
         switch (currentTool)
@@ -60,6 +62,9 @@ public class MapInspector : Editor
             default:
                 break;
         }
+
+        if (prevTool != currentTool)
+            SceneView.RepaintAll();
     }
     private void Render_TextureSelection()
     {
@@ -87,6 +92,8 @@ public class MapInspector : Editor
     }
     private void Render_PathingTool()
     {
+        EditorGUILayout.LabelField("Current Pathing Type");
+        currentPathingType = (PathingType)GUILayout.Toolbar((int)currentPathingType, System.Enum.GetNames(typeof(PathingType)));
     }
 
     public void OnSceneGUI()
@@ -97,6 +104,8 @@ public class MapInspector : Editor
                 Paint_TileMaterial();
                 break;
             case MapInspectorTool.Pathing:
+                Paint_PathingType();
+                Render_PathingType();
                 break;
             case MapInspectorTool.None:
             default:
@@ -125,6 +134,46 @@ public class MapInspector : Editor
                     e.Use();
                 }
             }
+        }
+    }
+    private void Paint_PathingType()
+    {
+        Event e = Event.current;
+
+        if (e.button == 0 &&
+            (e.type == EventType.MouseDrag || e.type == EventType.MouseDown) &&
+            !(e.modifiers == EventModifiers.Alt || e.modifiers == EventModifiers.Shift))
+        {
+            RaycastHit hitinfo;
+            if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(e.mousePosition), out hitinfo, 100))
+            {
+                if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
+                {
+                    Undo.RegisterUndo(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
+
+                    hitinfo.collider.gameObject.GetComponent<Tile>().pathingType = currentPathingType;
+
+                    e.Use();
+                }
+            }
+        }
+    }
+    private void Render_PathingType()
+    {
+        foreach (GameObject t in TargetMap.Tiles)
+        {
+            Color visualColor = Color.white;
+            switch (t.GetComponent<Tile>().pathingType)
+            {
+                case PathingType.GroundOnly:
+                    visualColor = Color.green;
+                    break;
+                case PathingType.UnPathable:
+                    visualColor = Color.red;
+                    break;
+            }
+            visualColor.a = 0.25f;
+            Handles.DrawSolidRectangleWithOutline(t.GetComponent<Tile>().SceneVerts, visualColor, visualColor);
         }
     }
 }
