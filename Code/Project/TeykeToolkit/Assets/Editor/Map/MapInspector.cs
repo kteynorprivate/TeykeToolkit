@@ -42,8 +42,8 @@ public class MapInspector : Editor
     public override void OnInspectorGUI()
     {
         // toggle tiles in hierarchy
-        // TargetMap.TilesEditable = EditorGUILayout.Toggle("Tiles visible in hierarchy:", TargetMap.TilesEditable);
-        // EditorApplication.RepaintHierarchyWindow();
+        TargetMap.TilesEditable = EditorGUILayout.Toggle("Tiles visible in hierarchy:", TargetMap.TilesEditable);
+        EditorApplication.RepaintHierarchyWindow();
 
         // render the toolbar
         EditorGUILayout.LabelField("Current Tool");

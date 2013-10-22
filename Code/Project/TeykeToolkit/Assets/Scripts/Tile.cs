@@ -9,6 +9,8 @@ public enum PathingType : int
 
 public class Tile : MonoBehaviour 
 {
+    public int XIndex;
+    public int YIndex;
     public PathingType pathingType;
 
     private static Vector3[] DefaultQuadVerts = new Vector3[4] {

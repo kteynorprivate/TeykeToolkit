@@ -48,12 +48,10 @@
      <Compile Include="Assets\Editor\Map\MapCreationDialog.cs" />
      <Compile Include="Assets\Editor\Map\MapInspector.cs" />
      <Compile Include="Assets\Editor\Map\TileInspector.cs" />
+     <Compile Include="Assets\Editor\Pathing\GoalBasedPathInspector.cs" />
      <Compile Include="Assets\Editor\Pathing\PathingNode.cs" />
      <Compile Include="Assets\Editor\Pathing\PathingRegion.cs" />
      <Compile Include="Assets\Editor\Pathing\PathingWindow.cs" />
- <Reference Include="Assembly-UnityScript">
- <HintPath>Library\ScriptAssemblies\Assembly-UnityScript.dll</HintPath>
- </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:\Program Files (x86)\Unity\Editor\Data\Managed\UnityEditor.Graphs.dll</HintPath>
  </Reference>

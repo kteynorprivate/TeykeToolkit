@@ -20,6 +20,21 @@ public sealed class MapTilePreview
 public sealed class Map : MonoBehaviour
 {
     public GameObject[] Tiles;
+    public Tile[,] Tiles_MultiDim
+    {
+        get
+        {
+            Tile[,] tiles = new Tile[Width, Height];
+            for (int r = 0; r < Height; r++)
+            {
+                for (int c = 0; c < Width; c++)
+                {
+                    tiles[c, r] = Tiles[(r * Width) + c].GetComponent<Tile>();
+                }
+            }
+            return tiles;
+        }
+    }
     public int Width;
     public int Height;
 
@@ -158,6 +173,8 @@ public sealed class Map : MonoBehaviour
                 Tiles[(r * Width) + c] = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 GameObject tile = Tiles[(r * Width) + c];
                 tile.AddComponent<Tile>();
+                tile.GetComponent<Tile>().XIndex = c;
+                tile.GetComponent<Tile>().YIndex = r;
                 tile.name = "tile_" + r + "_" + c;
                 tile.transform.Rotate(90, 0, 0);
                 tile.transform.position = new Vector3(xoffset, 0, zoffset);
@@ -176,7 +193,29 @@ public sealed class Map : MonoBehaviour
         }
     }
 
-    void Start () 
+    /// <summary>
+    /// Gets the tile closest to the position passed in.
+    /// </summary>
+    public Tile ClosestTile(Vector3 position)
+    {
+        // TODO: OPTIMIZE THIS!!!!! Quad trees ftw.
+
+        float shortestDistance = float.MaxValue;
+        Tile closest = null;
+
+        for (int i = 0; i < Tiles.Length; i++)
+        {
+            if ((Tiles[i].transform.position - position).sqrMagnitude < shortestDistance)
+            {
+                shortestDistance = (Tiles[i].transform.position - position).sqrMagnitude;
+                closest = Tiles[i].GetComponent<Tile>();
+            }
+        }
+
+        return closest;
+    }
+
+    void Start() 
     {
 	}
 
