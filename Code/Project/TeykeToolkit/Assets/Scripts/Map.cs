@@ -19,21 +19,11 @@ public sealed class MapTilePreview
 
 public sealed class Map : MonoBehaviour
 {
+
     public GameObject[] Tiles;
-    public Tile[,] Tiles_MultiDim
+    public GameObject GetTile(int r, int c)
     {
-        get
-        {
-            Tile[,] tiles = new Tile[Width, Height];
-            for (int r = 0; r < Height; r++)
-            {
-                for (int c = 0; c < Width; c++)
-                {
-                    tiles[c, r] = Tiles[(r * Width) + c].GetComponent<Tile>();
-                }
-            }
-            return tiles;
-        }
+        return Tiles[(r * Width) + c];
     }
     public int Width;
     public int Height;
@@ -161,7 +151,7 @@ public sealed class Map : MonoBehaviour
     }
     public void GenerateTiles()
     {
-        Tiles = new GameObject[Height * Width];
+        Tiles = new GameObject[Width * Height];
 
         float xoffset = (-Width / 2.0f) + 0.5f;
         float zoffset = (-Height / 2.0f) + 0.5f;
@@ -205,6 +195,7 @@ public sealed class Map : MonoBehaviour
 
         for (int i = 0; i < Tiles.Length; i++)
         {
+            float dist = (Tiles[i].transform.position - position).sqrMagnitude;
             if ((Tiles[i].transform.position - position).sqrMagnitude < shortestDistance)
             {
                 shortestDistance = (Tiles[i].transform.position - position).sqrMagnitude;

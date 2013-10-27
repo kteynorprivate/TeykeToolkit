@@ -5,7 +5,7 @@ public class GoalBasedPath : MonoBehaviour
 {
     public Map map;
     public Tile target;
-    public int[,] heatmap;
+    public float[,] heatmap;
     public Vector2[,] vectorField;
 
     public int maxHeatValue
@@ -23,6 +23,8 @@ public class GoalBasedPath : MonoBehaviour
 
     public Vector3 FollowPath(Vector3 position)
     {
+        if (vectorField == null) return Vector3.zero;
+        
         Tile current = map.ClosestTile(position);
         return new Vector3(vectorField[current.XIndex, current.YIndex].x, 0, vectorField[current.XIndex, current.YIndex].y);
     }
@@ -35,61 +37,99 @@ public class GoalBasedPath : MonoBehaviour
         generateHeatmap();
         generateVectorField();
     }
+    public void GeneratePath(Tile t)
+    {
+        target = t;
+
+        GeneratePath();
+    }
     private void generateHeatmap()
     {
-        heatmap = new int[map.Width, map.Height];
+        heatmap = new float[map.Height, map.Width];
         for (int r = 0; r < map.Height; r++)
         {
             for (int c = 0; c < map.Width; c++)
             {
-                heatmap[c, r] = -1;
+                heatmap[r, c] = -1;
             }
         }
-        setHeatmapValue(target.XIndex, target.YIndex, 0);
+        setHeatmapValue(target.YIndex, target.XIndex, 0);
     }
-    private void setHeatmapValue(int c, int r, int currentValue)
+    private void setHeatmapValue(int r, int c, float currentValue)
     {
         // no tile
         if (c < 0 || r < 0 || c >= map.Width || r >= map.Height) return;
         // leave unpathable tiles as -1
-        if (map.Tiles_MultiDim[c, r].pathingType == PathingType.UnPathable) return;
+        if (map.GetTile(r, c).GetComponent<Tile>().pathingType == PathingType.UnPathable) return;
         // if the tile has been visited by a shorter path return
-        if (heatmap[c, r] != -1 && heatmap[c, r] <= currentValue) return;
+        if (heatmap[r, c] != -1 && heatmap[r, c] <= currentValue) return;
+        
+        //if (currentValue > 15) return;
 
-        heatmap[c, r] = currentValue;
+        heatmap[r, c] = currentValue;
 
         // set surrounding tiles
-        setHeatmapValue(c - 1, r - 1, currentValue + 2);    // up-left
-        setHeatmapValue(c, r - 1, currentValue + 1);        // up
-        setHeatmapValue(c + 1, r - 1, currentValue + 2);    // up-right
-        setHeatmapValue(c - 1, r, currentValue + 1);        // left
-        setHeatmapValue(c + 1, r, currentValue + 1);        // right
-        setHeatmapValue(c - 1, r + 1, currentValue + 2);    // down-left
-        setHeatmapValue(c, r + 1, currentValue + 1);        // down
-        setHeatmapValue(c + 1, r + 1, currentValue + 2);    // down-right
+        setHeatmapValue(r - 1, c - 1, currentValue + 1.41f);    // up-left
+        setHeatmapValue(r - 1, c, currentValue + 1);        // up
+        setHeatmapValue(r - 1, c + 1, currentValue + 1.41f);    // up-right
+        setHeatmapValue(r, c - 1, currentValue + 1);        // left
+        setHeatmapValue(r, c + 1, currentValue + 1);        // right
+        setHeatmapValue(r + 1, c - 1, currentValue + 1.41f);    // down-left
+        setHeatmapValue(r + 1, c, currentValue + 1);        // down
+        setHeatmapValue(r + 1, c + 1, currentValue + 1.41f);    // down-right
     }
     private void generateVectorField()
     {
-        vectorField = new Vector2[map.Width, map.Height];
+        vectorField = new Vector2[map.Height, map.Width];
         for (int r = 0; r < map.Height; r++)
         {
             for (int c = 0; c < map.Width; c++)
             {
-                if (heatmap[c, r] == -1) continue;
+                #region old stuff, half working
+                if (heatmap[r, c] == -1) continue;
 
-                int left_dist = heatmap[c <= 0 ? c : c - 1, r];
-                if (left_dist == -1) left_dist = heatmap[c, r];
-                int right_dist = heatmap[c >= map.Width - 1 ? c : c + 1, r];
-                if (right_dist == -1) right_dist = heatmap[c, r];
-                int top_dist = heatmap[c, r <= 0 ? r : r - 1];
-                if (top_dist == -1) top_dist = heatmap[c, r];
-                int bot_dist = heatmap[c, r >= map.Height - 1 ? r : r + 1];
-                if (bot_dist == -1) bot_dist = heatmap[c, r];
+                float left_dist = heatmap[r, c <= 0 ? c : c - 1];
+                float right_dist = heatmap[r, c >= map.Width - 1 ? c : c + 1];
+                float top_dist = heatmap[r <= 0 ? r : r - 1, c];
+                float bot_dist = heatmap[r >= map.Height - 1 ? r : r + 1, c];
 
-                vectorField[c, r].x = left_dist - right_dist;
-                vectorField[c, r].y = top_dist - bot_dist;
+                //if (left_dist == -1) left_dist = right_dist;// heatmap[r, c];
+                //if (right_dist == -1) right_dist = left_dist;// heatmap[r, c];
+                //if (top_dist == -1) top_dist = bot_dist;// heatmap[r, c];
+                //if (bot_dist == -1) bot_dist = top_dist;// heatmap[r, c];
 
-                vectorField[c, r].Normalize();
+                if (left_dist == -1) left_dist = heatmap[r, c];
+                if (right_dist == -1) right_dist = heatmap[r, c];
+                if (top_dist == -1) top_dist = heatmap[r, c];
+                if (bot_dist == -1) bot_dist = heatmap[r, c];
+
+                vectorField[r, c].x = left_dist - right_dist;
+                vectorField[r, c].y = top_dist - bot_dist;
+
+                vectorField[r, c].Normalize();
+                #endregion
+
+                // find the lowest valued neighbor (>= 0)
+                // set the vector to the direction to that neighbor
+
+                //if (heatmap[r, c] == -1) continue;
+
+                //int lowest = heatmap[r, c];
+                //Vector2 dir = Vector2.zero;
+                //for (int roff = (r > 0 ? -1 : 0); roff <= (r < map.Height-1 ? 1 : 0); roff++)
+                //{
+                //    for (int coff = (c > 0 ? -1 : 0); coff <= (c < map.Width-1 ? 1 : 0); coff++)
+                //    {
+                //        //if (coff == 0 && roff == 0) continue;
+                //        if (heatmap[r + roff, c + coff] < lowest && heatmap[r + roff, c + coff] >= 0)
+                //        {
+                //            lowest = heatmap[r + roff, c + coff];
+                //            dir = new Vector2(coff, roff);
+                //        }
+                //    }
+                //}
+                //vectorField[r, c] = dir;
+                //vectorField[r, c].Normalize();
             }
         }
     }

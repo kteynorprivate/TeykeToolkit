@@ -30,4 +30,16 @@ public class Tile : MonoBehaviour
             return verts;
         }
     }
+
+    public static float PotentialFieldWeight(PathingType type)
+    {
+        switch (type)
+        {
+            case PathingType.GroundOnly:
+                return 0;
+            case PathingType.UnPathable:
+            default:
+                return -1;
+        }
+    }
 }
