@@ -11,7 +11,7 @@ public enum MapInspectorTool : int
 {
     None,
     Texturing,
-    Pathing,
+    Pathing
 }
 
 [CustomEditor(typeof(Map))]
@@ -28,8 +28,11 @@ public class MapInspector : Editor
             return targetMap;
         }
     }
-    static MapInspectorTool currentTool;
+    //static MapInspectorTool currentTool;
     static PathingType currentPathingType;
+	
+	static bool paintPathing;
+	static bool paintMaterial;
 
     static bool showPathingOutlines;
 
@@ -46,24 +49,32 @@ public class MapInspector : Editor
         EditorApplication.RepaintHierarchyWindow();
 
         // render the toolbar
-        EditorGUILayout.LabelField("Current Tool");
-        MapInspectorTool prevTool = currentTool;
-        currentTool = (MapInspectorTool)GUILayout.Toolbar((int)currentTool, System.Enum.GetNames(typeof(MapInspectorTool)));
+//        EditorGUILayout.LabelField("Current Tool");
+//        MapInspectorTool prevTool = currentTool;
+        //currentTool = (MapInspectorTool)GUILayout.Toolbar((int)currentTool, System.Enum.GetNames(typeof(MapInspectorTool)));
+		
+		paintMaterial = EditorGUILayout.Toggle("Texturing", paintMaterial);		
+		if(paintMaterial)
+			Render_TextureSelection();
+		if(paintPathing)
+			Render_PathingTool();
+		
+		paintPathing = EditorGUILayout.Toggle("Pathing", paintPathing);
+		
+        //switch (currentTool)
+        //{
+        //    case MapInspectorTool.Texturing:
+        //        Render_TextureSelection();
+        //        break;
+        //    case MapInspectorTool.Pathing:
+        //        Render_PathingTool();
+        //        break;
+        //    case MapInspectorTool.None:
+        //    default:
+        //        break;
+        //}
 
-        switch (currentTool)
-        {
-            case MapInspectorTool.Texturing:
-                Render_TextureSelection();
-                break;
-            case MapInspectorTool.Pathing:
-                Render_PathingTool();
-                break;
-            case MapInspectorTool.None:
-            default:
-                break;
-        }
-
-        if (prevTool != currentTool)
+//        if (prevTool != currentTool)
             SceneView.RepaintAll();
     }
     private void Render_TextureSelection()
@@ -98,23 +109,39 @@ public class MapInspector : Editor
 
     public void OnSceneGUI()
     {
-        switch (currentTool)
-        {
-            case MapInspectorTool.Texturing:
-                Paint_TileMaterial();
-                break;
-            case MapInspectorTool.Pathing:
-                Paint_PathingType();
-                Render_PathingType();
-                break;
-            case MapInspectorTool.None:
-            default:
-                break;
-        }
+		//if(currentTool == MapInspectorTool.None)
+		//	return;
+		
+		bool useEvent = false;
+		if(paintMaterial)
+			if(Paint_TileMaterial())
+				useEvent = true;
+		if(paintPathing)
+		{
+			if(Paint_PathingType())
+				useEvent = true;
+			Render_PathingType();
+		}
+		
+		if(useEvent) Event.current.Use();
+		
+        //switch (currentTool)
+        //{
+        //    case MapInspectorTool.Texturing:
+        //        Paint_TileMaterial();
+        //        break;
+        //    case MapInspectorTool.Pathing:
+        //        Paint_PathingType();
+        //        Render_PathingType();
+        //        break;
+        //    case MapInspectorTool.None:
+        //    default:
+        //        break;
+        //}
     }
-    private void Paint_TileMaterial()
+    private bool Paint_TileMaterial()
     {
-        if (TargetMap.SelectedMaterial == null) return;
+        if (TargetMap.SelectedMaterial == null) return false;
 
         Event e = Event.current;
 
@@ -131,12 +158,14 @@ public class MapInspector : Editor
 
                     hitinfo.collider.gameObject.renderer.material = TargetMap.SelectedMaterial;
 
-                    e.Use();
+                    //e.Use();
+					return true;
                 }
             }
         }
+		return false;
     }
-    private void Paint_PathingType()
+    private bool Paint_PathingType()
     {
         Event e = Event.current;
 
@@ -152,11 +181,13 @@ public class MapInspector : Editor
                     Undo.RegisterUndo(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
 
                     hitinfo.collider.gameObject.GetComponent<Tile>().pathingType = currentPathingType;
-
-                    e.Use();
+					targetMap.Refresh();
+                    //e.Use();
+					return true;
                 }
             }
         }
+		return false;
     }
     private void Render_PathingType()
     {

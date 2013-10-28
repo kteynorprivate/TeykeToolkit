@@ -44,13 +44,10 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AStarFollower.cs" />
-     <Compile Include="Assets\Scripts\AStarPathing.cs" />
-     <Compile Include="Assets\Scripts\AStarTree.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
-     <Compile Include="Assets\Scripts\Pathing\AStarPath.cs" />
+     <Compile Include="Assets\Scripts\Pathing\AStarPathfinder.cs" />
      <Compile Include="Assets\Scripts\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />

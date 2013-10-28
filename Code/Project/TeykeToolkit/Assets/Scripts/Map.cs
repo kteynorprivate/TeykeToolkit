@@ -17,14 +17,40 @@ public sealed class MapTilePreview
     }
 }
 
+public delegate void PathRegenerateEvent();
+
 public sealed class Map : MonoBehaviour
 {
-
+	public event PathRegenerateEvent MapModified;
+	
     public GameObject[] Tiles;
     public GameObject GetTile(int r, int c)
     {
         return Tiles[(r * Width) + c];
     }
+    public GameObject this[int i]
+    {
+        get
+        {
+            return Tiles[i];
+        }
+        set
+        {
+            Tiles[i] = value;
+        }
+    }
+    public GameObject this[int r, int c]
+    {
+        get
+        {
+            return Tiles[(r * Width) + c];
+        }
+        set
+        {
+            Tiles[(r * Width) + c] = value;
+        }
+    }
+
     public int Width;
     public int Height;
 
@@ -125,7 +151,7 @@ public sealed class Map : MonoBehaviour
             foreach (var go in FindObjectsOfType(typeof(GameObject)))
             {
                 if ((go as GameObject).GetComponent<Map>() != null)
-                    (go as GameObject).GetComponent<Map>();
+                    return (go as GameObject).GetComponent<Map>();
             }
 
             return null;
@@ -152,6 +178,11 @@ public sealed class Map : MonoBehaviour
     public void GenerateTiles()
     {
         Tiles = new GameObject[Width * Height];
+        for (int i = 0; i < Width * Height; i++)
+        {
+            Tiles[i] = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            Tiles[i].AddComponent<Tile>();
+        }
 
         float xoffset = (-Width / 2.0f) + 0.5f;
         float zoffset = (-Height / 2.0f) + 0.5f;
@@ -160,11 +191,15 @@ public sealed class Map : MonoBehaviour
         {
             for (int c = 0; c < Width; c++)
             {
-                Tiles[(r * Width) + c] = GameObject.CreatePrimitive(PrimitiveType.Quad);
+                //Tiles[(r * Width) + c] = GameObject.CreatePrimitive(PrimitiveType.Quad);
                 GameObject tile = Tiles[(r * Width) + c];
-                tile.AddComponent<Tile>();
-                tile.GetComponent<Tile>().XIndex = c;
-                tile.GetComponent<Tile>().YIndex = r;
+                //tile.AddComponent<Tile>();
+                Tile t = tile.GetComponent<Tile>();
+                //tile.GetComponent<Tile>().XIndex = c;
+                //tile.GetComponent<Tile>().YIndex = r;
+                t.XIndex = c;
+                t.YIndex = r;
+
                 tile.name = "tile_" + r + "_" + c;
                 tile.transform.Rotate(90, 0, 0);
                 tile.transform.position = new Vector3(xoffset, 0, zoffset);
@@ -176,12 +211,29 @@ public sealed class Map : MonoBehaviour
                 tile.hideFlags = HideFlags.HideInHierarchy;
                 tile.isStatic = true;
 
+
+                t.link_UpLeft = (r < Height - 1 && c > 0) ? Tiles[((r + 1) * Width) + (c - 1)].GetComponent<Tile>() : null;
+                t.link_Up = (r < Height - 1) ? Tiles[((r + 1) * Width) + (c)].GetComponent<Tile>() : null;
+                t.link_UpRight = (r < Height - 1 && c < Width - 1) ? Tiles[((r + 1) * Width) + (c + 1)].GetComponent<Tile>() : null;
+                t.link_Left = (c > 0) ? Tiles[((r) * Width) + (c - 1)].GetComponent<Tile>() : null;
+                t.link_Right = (c < Width - 1) ? Tiles[((r) * Width) + (c + 1)].GetComponent<Tile>() : null;
+                t.link_DownLeft = (r > 0 && c > 0) ? Tiles[((r - 1) * Width) + (c - 1)].GetComponent<Tile>() : null;
+                t.link_Down = (r > 0) ? Tiles[((r - 1) * Width) + (c)].GetComponent<Tile>() : null;
+                t.link_DownRight = (r > 0 && c < Width - 1) ? Tiles[((r - 1) * Width) + (c + 1)].GetComponent<Tile>() : null;
+
+                t.pathingType = PathingType.GroundOnly;
+
                 xoffset += 1;
             }
             xoffset = (-Width / 2.0f) + 0.5f;
             zoffset += 1;
         }
     }
+	
+	public void Refresh()
+	{
+		if(MapModified != null) MapModified();
+	}
 
     /// <summary>
     /// Gets the tile closest to the position passed in.
@@ -196,21 +248,13 @@ public sealed class Map : MonoBehaviour
         for (int i = 0; i < Tiles.Length; i++)
         {
             float dist = (Tiles[i].transform.position - position).sqrMagnitude;
-            if ((Tiles[i].transform.position - position).sqrMagnitude < shortestDistance)
+            if (dist < shortestDistance)
             {
-                shortestDistance = (Tiles[i].transform.position - position).sqrMagnitude;
+                shortestDistance = dist;
                 closest = Tiles[i].GetComponent<Tile>();
             }
         }
 
         return closest;
     }
-
-    void Start() 
-    {
-	}
-
-    void Update()
-    {
-	}
 }

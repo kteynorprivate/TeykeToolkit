@@ -8,10 +8,7 @@ public class TileInspector : Editor
     public override void OnInspectorGUI()
     {
         Tools.current = Tool.None;
-
-        // let user paint textures on tiles if the selected texture isn't null
-        if (MapTilePreview.SelectedTile != null)
-        {
-        }
+        
+        base.OnInspectorGUI();
     }
 }
