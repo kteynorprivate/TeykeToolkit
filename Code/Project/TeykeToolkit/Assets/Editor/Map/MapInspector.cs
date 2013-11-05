@@ -7,13 +7,6 @@ using System.Collections.Generic;
 
 using Object = UnityEngine.Object;
 
-public enum MapInspectorTool : int
-{
-    None,
-    Texturing,
-    Pathing
-}
-
 [CustomEditor(typeof(Map))]
 public class MapInspector : Editor
 {
@@ -28,7 +21,6 @@ public class MapInspector : Editor
             return targetMap;
         }
     }
-    //static MapInspectorTool currentTool;
     static PathingType currentPathingType;
 	
 	static bool paintPathing;

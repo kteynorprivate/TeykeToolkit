@@ -44,6 +44,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\EventSystem\Messenger.cs" />
+     <Compile Include="Assets\Scripts\EventSystem\TeykeEvent.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
@@ -51,6 +53,8 @@
      <Compile Include="Assets\Scripts\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
+     <Compile Include="Assets\regionScript.cs" />
+     <Compile Include="Assets\sizeRandomizer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -69,7 +69,7 @@ public class AStarPathfinder : MonoBehaviour
 		
 		if(autoPath && Path.Count == 0)
 		{
-			GeneratePath(transform.position, new Vector3((Random.value * map.Width) - (map.Width / 2), 0, (Random.value * map.Height) - (map.Height / 2)));
+			GeneratePath(transform.position, new Vector3((Random.value * map.Width) - (map.Width / 2), transform.position.y, (Random.value * map.Height) - (map.Height / 2)));
 		}
 
         UpdatePath();

@@ -166,6 +166,10 @@ public sealed class Map : MonoBehaviour
         TileMaterials = new List<Material>();
     }
 
+	void Start()
+	{
+	}
+	
     public void GenerateMap(int width, int height)
     {
         gameObject.transform.hideFlags = HideFlags.HideInInspector;
