@@ -16,7 +16,7 @@ namespace Teyke
 
         }
 
-        public override void Upgrade(int targetIndex)
+        public override void Upgrade()
         {
 
         }

@@ -52,6 +52,7 @@
      <Compile Include="Assets\Scripts\GameUnits\GameStructure.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameUnit.cs" />
      <Compile Include="Assets\Scripts\GameUnits\TechTree.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\TestUpgrader.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />

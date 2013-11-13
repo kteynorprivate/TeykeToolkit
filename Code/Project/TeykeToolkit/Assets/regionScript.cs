@@ -15,6 +15,8 @@ public class regionScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+        if (watch == null) return;
+
 		if(renderer.bounds.Intersects(watch.renderer.bounds))
 		{
 			Messenger.Invoke("region_entered");

@@ -27,14 +27,12 @@ namespace Teyke
         public float maxHP;
         public float productionTime;
 
-        public string[] upgradesInto;
-        public abstract void Upgrade(int targetIndex);
-
-
         // resource costs: (ex: gold, wood, food)
         // protected int resource1 cost
         // protected int resource2 cost
         // protected int resource3 cost
+
+        public abstract void Upgrade();
 
         public void CloneData(GameEntity target)
         {

@@ -9,6 +9,7 @@ namespace Teyke
         private float buildTime;
 
         public string[] structuresBuilt;
+        public GameUnit UpgradeUnit;
 
         void Start()
         {
@@ -19,15 +20,13 @@ namespace Teyke
 
         }
 
-        public override void Upgrade(int targetIndex)
+        public override void Upgrade()
         {
-            if (targetIndex < 0 || targetIndex >= upgradesInto.Length) return;
+            if (UpgradeUnit == null) return;
 
-            if (GameEntities.GetInstance().Units[upgradesInto[targetIndex]] == null) return;
-
-            GameUnit upgrade = Instantiate(GameEntities.GetInstance().Units[upgradesInto[targetIndex]], transform.position, transform.rotation) as GameUnit;
+            GameUnit upgrade = Instantiate(UpgradeUnit, transform.position, transform.rotation) as GameUnit;
             CloneData(upgrade);
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }
