@@ -174,3 +174,11 @@ public class AStarPathfinder : MonoBehaviour
 		return true;
     }
 }
+
+public static class AStarHelper
+{
+    public static List<Vector3> GeneratePath(Vector3 start, Vector3 end, Map map)
+    {
+        throw new UnityException();
+    }
+}

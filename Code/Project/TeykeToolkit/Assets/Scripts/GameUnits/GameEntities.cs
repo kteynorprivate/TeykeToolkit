@@ -5,7 +5,7 @@ using System;
 
 namespace Teyke
 {
-    public enum Player
+    public enum PlayerNumber
     {
         Player1,
         Player2,
@@ -19,18 +19,32 @@ namespace Teyke
         NeutralHostile
     }
 
+    public class Player
+    {
+        public PlayerNumber number;
+        public int resource1, resource2, resource3;
+    }
+
     public abstract class GameEntity : MonoBehaviour
     {
-        public Player owner;
+        public PlayerNumber owner;
 
         public float currentHP;
         public float maxHP;
-        public float productionTime;
+        public float bounty;
+
+        public bool Alive
+        {
+            get
+            {
+                return currentHP > 0;
+            }
+        }
 
         // resource costs: (ex: gold, wood, food)
-        // protected int resource1 cost
-        // protected int resource2 cost
-        // protected int resource3 cost
+        public int resource1_cost;
+        public int resource2_cost;
+        public int resource3_cost;
 
         public abstract void Upgrade();
 
@@ -39,13 +53,14 @@ namespace Teyke
             target.owner = owner;
             target.currentHP = currentHP <= target.maxHP ? currentHP : target.maxHP;
         }
-    }
 
-    //public class GameEntities
-    //{
-    //    public static Dictionary<string, GameUnit> Units = new Dictionary<string, GameUnit>();
-    //    public static Dictionary<string, GameStructure> Structures = new Dictionary<string, GameStructure>();
-    //}
+        public void ApplyDamage(float amount)
+        {
+            currentHP -= amount;
+
+            if(!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
+        }
+    }
 
     [Serializable]
     public class GameEntities : ScriptableObject

@@ -46,8 +46,11 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Creep.cs" />
+     <Compile Include="Assets\Scripts\CreepManager.cs" />
      <Compile Include="Assets\Scripts\EventSystem\Messenger.cs" />
      <Compile Include="Assets\Scripts\EventSystem\TeykeEvent.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Attack.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameEntities.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameStructure.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameUnit.cs" />
@@ -60,6 +63,7 @@
      <Compile Include="Assets\Scripts\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
+     <Compile Include="Assets\Scripts\Towers\Tower_1.cs" />
      <Compile Include="Assets\regionScript.cs" />
      <Compile Include="Assets\sizeRandomizer.cs" />
   </ItemGroup>

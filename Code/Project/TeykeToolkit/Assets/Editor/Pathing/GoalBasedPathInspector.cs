@@ -69,7 +69,6 @@ public class GoalBasedPathInspector : Editor
     private void RenderHeatmap()
     {
         if (targetPathing.heatmap == null) return;
-        Color heat = Color.black;
 
         if (heatMap == null)
         {
