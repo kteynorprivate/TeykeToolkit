@@ -13,22 +13,20 @@ public class Attack : MonoBehaviour
 
     public float attackSpeed;
     private float cooldown;
+
+	private GameEntity currentTarget;
+
+	public Projectile projectileBase;
     
     protected PlayerNumber owner;
-
-    bool AttackTarget(GameEntity t)
-    {
-        if (t == null) return false;
-        t.ApplyDamage(Random.Range(minDamage, maxDamage));
-        Debug.Log("attacted!");
-        return true;
-    }
 
 	void Start () 
     {
         var go = gameObject.GetComponent<GameEntity>() as GameEntity;
         if (go == null) throw new UnityException("attack script is not attached to a GameEntity.");
         owner = go.owner;
+
+		projectileBase.transform.position = transform.position;
 	}
 	
 	void Update () 
@@ -36,8 +34,19 @@ public class Attack : MonoBehaviour
         cooldown -= Time.deltaTime;
         if (cooldown > 0) return;
 
-        if (AttackTarget(CheckForTarget()))
-            cooldown = attackSpeed;
+		if(TryAttack())
+			cooldown = attackSpeed;
+	}
+
+	private bool TryAttack()
+	{
+		GameEntity target = CheckForTarget();
+
+		if (!target) return false;
+
+		Projectile.FireNew(projectileBase, target, Random.Range(minDamage, maxDamage));
+		currentTarget = target;
+		return true;
 	}
     private GameEntity CheckForTarget()
     {
@@ -50,8 +59,13 @@ public class Attack : MonoBehaviour
         float closestRange = maxRange;
         foreach (var t in targets)
         {
-            if ((t.transform.position - transform.position).magnitude < maxRange)
+			float dist = (t.transform.position - transform.position).magnitude;
+			if (dist <= closestRange && dist >= minRange)
+			{
                 closest = t;
+				closestRange = dist;
+				if(closest == currentTarget) break;
+			}
         }
 
         return closest;

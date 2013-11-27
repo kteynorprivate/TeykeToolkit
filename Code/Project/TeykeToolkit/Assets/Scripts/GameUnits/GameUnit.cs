@@ -1,8 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Teyke
 {
+	public enum UnitState
+	{
+		Idle,
+		Move,
+		MoveAttack,
+		Attack
+	}
+
     [ExecuteInEditMode()]
     public class GameUnit : GameEntity
     {
@@ -10,6 +19,8 @@ namespace Teyke
 
         public string[] structuresBuilt;
         public GameUnit UpgradeUnit;
+
+		private List<Vector3> path = new List<Vector3>();
 
         void Start()
         {

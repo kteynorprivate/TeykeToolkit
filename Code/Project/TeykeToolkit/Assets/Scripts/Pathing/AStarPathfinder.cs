@@ -147,7 +147,7 @@ public class AStarPathfinder : MonoBehaviour
     private bool PlaceInCorrectList(Tile t, AStarConnection c, float linkCost)
     {
         if (t == null) return false;
-        if (t.pathingType == PathingType.UnPathable) return false;
+        if (t.pathingType == PathingType.UnPathable || t.pathingType == PathingType.AirOnly) return false;
 
         // check if the tile is on the open list.
         var openListInstance = OpenList.Where(conn => conn.tile.Equals(t));

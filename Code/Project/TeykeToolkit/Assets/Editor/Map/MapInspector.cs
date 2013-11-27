@@ -40,34 +40,15 @@ public class MapInspector : Editor
         TargetMap.TilesEditable = EditorGUILayout.Toggle("Tiles visible in hierarchy:", TargetMap.TilesEditable);
         EditorApplication.RepaintHierarchyWindow();
 
-        // render the toolbar
-//        EditorGUILayout.LabelField("Current Tool");
-//        MapInspectorTool prevTool = currentTool;
-        //currentTool = (MapInspectorTool)GUILayout.Toolbar((int)currentTool, System.Enum.GetNames(typeof(MapInspectorTool)));
-		
 		paintMaterial = EditorGUILayout.Toggle("Texturing", paintMaterial);		
 		if(paintMaterial)
 			Render_TextureSelection();
+
+		paintPathing = EditorGUILayout.Toggle("Pathing", paintPathing);
 		if(paintPathing)
 			Render_PathingTool();
-		
-		paintPathing = EditorGUILayout.Toggle("Pathing", paintPathing);
-		
-        //switch (currentTool)
-        //{
-        //    case MapInspectorTool.Texturing:
-        //        Render_TextureSelection();
-        //        break;
-        //    case MapInspectorTool.Pathing:
-        //        Render_PathingTool();
-        //        break;
-        //    case MapInspectorTool.None:
-        //    default:
-        //        break;
-        //}
 
-//        if (prevTool != currentTool)
-            SceneView.RepaintAll();
+		SceneView.RepaintAll();
     }
     private void Render_TextureSelection()
     {
@@ -96,14 +77,11 @@ public class MapInspector : Editor
     private void Render_PathingTool()
     {
         EditorGUILayout.LabelField("Current Pathing Type");
-        currentPathingType = (PathingType)GUILayout.Toolbar((int)currentPathingType, System.Enum.GetNames(typeof(PathingType)));
+        currentPathingType = (PathingType)GUILayout.Toolbar((int)currentPathingType, currentPathingType.Names());
     }
 
     public void OnSceneGUI()
-    {
-		//if(currentTool == MapInspectorTool.None)
-		//	return;
-		
+    {		
 		bool useEvent = false;
 		if(paintMaterial)
 			if(Paint_TileMaterial())
@@ -116,20 +94,6 @@ public class MapInspector : Editor
 		}
 		
 		if(useEvent) Event.current.Use();
-		
-        //switch (currentTool)
-        //{
-        //    case MapInspectorTool.Texturing:
-        //        Paint_TileMaterial();
-        //        break;
-        //    case MapInspectorTool.Pathing:
-        //        Paint_PathingType();
-        //        Render_PathingType();
-        //        break;
-        //    case MapInspectorTool.None:
-        //    default:
-        //        break;
-        //}
     }
     private bool Paint_TileMaterial()
     {
@@ -146,10 +110,10 @@ public class MapInspector : Editor
             {
                 if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
                 {
-                    Undo.RegisterUndo(hitinfo.collider.gameObject.renderer, "apply tile material");
+                    //Undo.RegisterUndo(hitinfo.collider.gameObject.renderer, "apply tile material"
+					Undo.RecordObject(hitinfo.collider.gameObject.renderer, "apply tile material");
 
                     hitinfo.collider.gameObject.renderer.material = TargetMap.SelectedMaterial;
-
                     //e.Use();
 					return true;
                 }
@@ -170,7 +134,8 @@ public class MapInspector : Editor
             {
                 if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
                 {
-                    Undo.RegisterUndo(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
+                    //Undo.RegisterUndo(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
+					Undo.RecordObject(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
 
                     hitinfo.collider.gameObject.GetComponent<Tile>().pathingType = currentPathingType;
 					targetMap.Refresh();
@@ -188,14 +153,17 @@ public class MapInspector : Editor
             Color visualColor = Color.white;
             switch (t.GetComponent<Tile>().pathingType)
             {
-                case PathingType.GroundOnly:
+                case PathingType.Pathable:
                     visualColor = Color.green;
                     break;
+				case PathingType.AirOnly:
+					visualColor = Color.blue;
+					break;
                 case PathingType.UnPathable:
                     visualColor = Color.red;
                     break;
             }
-            visualColor.a = 0.25f;
+            visualColor.a = 0.15f;
             Handles.DrawSolidRectangleWithOutline(t.GetComponent<Tile>().SceneVerts, visualColor, visualColor);
         }
     }

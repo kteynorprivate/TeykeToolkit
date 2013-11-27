@@ -17,7 +17,7 @@ namespace Teyke
         GameStructure newGameStructure;
 
         [MenuItem("Window/Unit Editor")]
-        static void ShowWindow()
+        public static void ShowWindow()
         {
             EditorWindow.GetWindow<UnitEditor>();
         }

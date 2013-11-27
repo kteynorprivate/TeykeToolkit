@@ -4,7 +4,8 @@ using System.Collections;
 public enum PathingType : int
 {
     UnPathable,
-    GroundOnly
+    Pathable,
+	AirOnly
 }
 
 public class Tile : MonoBehaviour 
@@ -46,7 +47,7 @@ public class Tile : MonoBehaviour
     {
         switch (type)
         {
-            case PathingType.GroundOnly:
+            case PathingType.Pathable:
                 return 0;
             case PathingType.UnPathable:
             default:

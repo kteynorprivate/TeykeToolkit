@@ -225,7 +225,7 @@ public sealed class Map : MonoBehaviour
                 t.link_Down = (r > 0) ? Tiles[((r - 1) * Width) + (c)].GetComponent<Tile>() : null;
                 t.link_DownRight = (r > 0 && c < Width - 1) ? Tiles[((r - 1) * Width) + (c + 1)].GetComponent<Tile>() : null;
 
-                t.pathingType = PathingType.GroundOnly;
+                t.pathingType = PathingType.Pathable;
 
                 xoffset += 1;
             }

@@ -76,7 +76,7 @@ namespace Teyke
             if (instance == null)
                 instance = ScriptableObject.FindObjectOfType<GameEntities>();
             if (instance == null)
-                instance = ScriptableObject.Instantiate(new GameEntities()) as GameEntities;
+				instance = ScriptableObject.CreateInstance<GameEntities> ();
             return instance;
         }
 

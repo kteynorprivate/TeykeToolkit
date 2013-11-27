@@ -35,4 +35,9 @@ public static class ExtensionMethods
 
         return false;
     }
+
+	public static string[] Names(this PathingType pt)
+	{
+		return new string[] { "Unpathable", "Pathable", "Air Only" };
+	}
 }
