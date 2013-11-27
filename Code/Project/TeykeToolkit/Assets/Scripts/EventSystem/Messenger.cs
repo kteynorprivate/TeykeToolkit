@@ -137,7 +137,6 @@ public static class Messenger<T>
 		if(registeredEvents.TryGetValue(eventName, out d))
 		{
 			Callback<T> callback = (Callback<T>)d;
-			Debug.Log(callback);
 			if(callback != null)
 				callback(arg);
 		}

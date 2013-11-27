@@ -44,7 +44,7 @@ public class Attack : MonoBehaviour
 
 		if (!target) return false;
 
-		Projectile.FireNew(projectileBase, target, Random.Range(minDamage, maxDamage));
+		Projectile.FireNew(projectileBase, transform.position, target, Random.Range(minDamage, maxDamage));
 		currentTarget = target;
 		return true;
 	}

@@ -60,6 +60,11 @@ namespace Teyke
 
             if(!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
         }
+
+		public void OnMouseDown()
+		{
+			Messenger<GameEntity>.Invoke("GameEntityPressed", this);
+		}
     }
 
     [Serializable]

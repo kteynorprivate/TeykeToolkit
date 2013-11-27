@@ -55,6 +55,11 @@ public class Tile : MonoBehaviour
         }
     }
 
+	public void OnMouseDown()
+	{
+		Messenger<Tile>.Invoke("TilePressed", this);
+	}
+
     public override bool Equals(object o)
     {
         if (o.GetType() != typeof(Tile)) return false;

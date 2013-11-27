@@ -11,6 +11,7 @@ namespace Teyke
 	
 		private float damage;
 		private GameEntity target;
+		public Vector3 tpos;
 	
 		void Start () 
 		{
@@ -20,21 +21,23 @@ namespace Teyke
 		public void Fire(GameEntity t, float d)
 		{
 			target = t;
+			tpos = target.transform.position;
 			damage = d;
 		}
 	
 		void Update () 
 		{
-			if (target == null) 
+			if (target != null) 
 			{
-				Destroy (this.gameObject);
-				return;
+				tpos = target.transform.position;
 			}
+			transform.LookAt(tpos);				
+			
 
-			transform.Translate ((target.transform.position - transform.position).normalized * speed * Time.deltaTime);
-			transform.LookAt(target.transform.position);
+			transform.Translate (new Vector3 (0, 0, speed * Time.deltaTime));
 
-			if ((transform.position - target.transform.position).sqrMagnitude < radius * 2) 
+			float dst = (transform.position - tpos).sqrMagnitude;
+			if (dst < radius * 2 || dst > 10000) 	// TODO: fix this magic number. find a better way to check if the target is borked.
 			{
 				// projectile hit
 				target.ApplyDamage(damage);
@@ -42,9 +45,10 @@ namespace Teyke
 			}
 		}
 
-		public static void FireNew(Projectile proj, GameEntity t, float d)
+		public static void FireNew(Projectile proj, Vector3 origin, GameEntity t, float d)
 		{
-			Projectile newProj = Instantiate (proj) as Projectile;
+			Projectile newProj = Instantiate(proj) as Projectile;
+			newProj.transform.position = origin;
 			newProj.Fire(t, d);
 		}
 	}

@@ -53,13 +53,14 @@ public class NewUnitDialog : EditorWindow
 	float maxRange;
 	float minDamage;
 	float maxDamage;
+	float attackSpeed;
 	
 	[MenuItem("Teyke/New Unit Type", false, 11)]
 	public static void NewUnit ()
 	{
 		var window = EditorWindow.GetWindow<NewUnitDialog> (true, "New Unit");
 		window.minSize = new Vector2(300, 160);
-		window.unitName = "new unit";
+		window.unitName = "new_unit";
 		window.maxHP = 10;
 	}
 	
@@ -88,6 +89,9 @@ public class NewUnitDialog : EditorWindow
 			maxRange = EditorGUILayout.FloatField("Max", maxRange);
 			GUILayout.FlexibleSpace();
 			EditorGUILayout.EndHorizontal();
+
+			attackSpeed = EditorGUILayout.FloatField("Speed", attackSpeed);
+
 		}
 
 		EditorGUILayout.Space();
@@ -99,8 +103,7 @@ public class NewUnitDialog : EditorWindow
 				return;
 			}
 
-			string unitPath = "Assets/Units/" + unitName + ".prefab";
-			Debug.Log(Resources.LoadAssetAtPath<Object>(unitPath) + " " + unitPath);
+			string unitPath = "Assets/GameEntities/Units/" + unitName + ".prefab";
 			if(Resources.LoadAssetAtPath<Object>(unitPath))
 			{
 				if(EditorUtility.DisplayDialog("Warning", "A prefab with that name already exists. Do you want to overwrite it?", "Yes", "No"))
@@ -127,16 +130,113 @@ public class NewUnitDialog : EditorWindow
 			attack.maxDamage = maxDamage;
 			attack.minRange = minRange;
 			attack.maxRange = maxRange;
+			attack.attackSpeed = attackSpeed;
 		}
 
-		if(!Directory.Exists(Application.dataPath + "/Units"))
-		{
-			Debug.Log("Creating Units folder.");
-			AssetDatabase.CreateFolder("Assets", "Units");
-		}
+		if(!Directory.Exists(Application.dataPath + "/GameEntities"))
+			AssetDatabase.CreateFolder("Assets", "GameEntities");
+		if(!Directory.Exists(Application.dataPath + "/GameEntities/Units"))
+			AssetDatabase.CreateFolder("Assets/GameEntities", "Units");
 		PrefabUtility.CreatePrefab (path, newUnit);
-		Debug.Log ("New unit prefab created: " + unitName);
 		DestroyImmediate (newUnit);
+	}
+}
+
+public class NewStructureDialog : EditorWindow
+{
+	string structureName;
+	int maxHP;
+	bool hasAttack;
+	float minRange;
+	float maxRange;
+	float minDamage;
+	float maxDamage;
+	float attackSpeed;
+	
+	
+	[MenuItem("Teyke/New Structure Type", false, 12)]
+	public static void NewStructure()
+	{
+		var window = EditorWindow.GetWindow<NewStructureDialog> (true, "New Structure");
+		window.minSize = new Vector2(300, 160);
+		window.structureName = "new_structure";
+		window.maxHP = 10;
+	}
+	
+	void OnGUI()
+	{
+		EditorGUIUtility.labelWidth = 70;
+		
+		structureName = EditorGUILayout.TextField ("Name", structureName).Replace(" ", "");
+		maxHP = EditorGUILayout.IntField ("Max HP", maxHP);
+		
+		hasAttack = EditorGUILayout.ToggleLeft("Has Attack", hasAttack);
+		if(hasAttack)
+		{
+			EditorGUIUtility.labelWidth = 35;
+			
+			EditorGUILayout.BeginHorizontal(new GUIStyle(){margin = new RectOffset(15,0,0,0)});
+			EditorGUILayout.LabelField("Damage", GUILayout.Width(60), GUILayout.ExpandWidth(false));
+			minDamage = EditorGUILayout.FloatField("Min", minDamage);
+			maxDamage = EditorGUILayout.FloatField("Max", maxDamage);
+			GUILayout.FlexibleSpace();
+			EditorGUILayout.EndHorizontal();
+			
+			EditorGUILayout.BeginHorizontal(new GUIStyle(){margin = new RectOffset(15,0,0,0)});
+			EditorGUILayout.LabelField("Range", GUILayout.Width(60), GUILayout.ExpandWidth(false));
+			minRange = EditorGUILayout.FloatField("Min", minRange);
+			maxRange = EditorGUILayout.FloatField("Max", maxRange);
+			GUILayout.FlexibleSpace();
+			EditorGUILayout.EndHorizontal();
+
+			attackSpeed = EditorGUILayout.FloatField("Speed", attackSpeed);
+		}
+		
+		EditorGUILayout.Space();
+		if(GUILayout.Button("Create"))
+		{
+			if(string.IsNullOrEmpty(structureName))
+			{
+				EditorUtility.DisplayDialog("Error", "The structure needs to have a name.", "Ok");
+				return;
+			}
+			
+			string structurePath = "Assets/GameEntities/Structures/" + structureName + ".prefab";
+			if(Resources.LoadAssetAtPath<Object>(structurePath))
+			{
+				if(EditorUtility.DisplayDialog("Warning", "A prefab with that name already exists. Do you want to overwrite it?", "Yes", "No"))
+				{
+					CreateStructurePrefab(structurePath);
+				}
+			}
+			else CreateStructurePrefab(structurePath);
+			
+			this.Close();
+		}
+	}
+	
+	void CreateStructurePrefab(string path)
+	{
+		GameObject newStructure = new GameObject (structureName);
+		GameStructure structure = newStructure.AddComponent<GameStructure>();
+		structure.maxHP = maxHP;
+		
+		if(hasAttack) 
+		{
+			Attack attack = newStructure.AddComponent<Attack>();
+			attack.minDamage = minDamage;
+			attack.maxDamage = maxDamage;
+			attack.minRange = minRange;
+			attack.maxRange = maxRange;
+			attack.attackSpeed = attackSpeed;
+		}
+		
+		if(!Directory.Exists(Application.dataPath + "/GameEntities"))
+			AssetDatabase.CreateFolder("Assets", "GameEntities");
+		if(!Directory.Exists(Application.dataPath + "/GameEntities/Structures"))
+			AssetDatabase.CreateFolder("Assets/GameEntities", "Structures");
+		PrefabUtility.CreatePrefab (path, newStructure);
+		DestroyImmediate (newStructure);
 	}
 }
 
