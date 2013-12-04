@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Teyke;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(gridmap))]
 public class gridmap_inspector : Editor 
@@ -21,6 +22,8 @@ public class gridmap_inspector : Editor
     static bool showInvalidCells;
 
     static bool togglePathable;
+
+    static List<Vector3> path;
 
     public override void OnInspectorGUI()
     {
@@ -68,6 +71,12 @@ public class gridmap_inspector : Editor
             if (cell.valid && showValidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.green + c, Color.green);
             else if (!cell.valid && showInvalidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.red + c, Color.red);
         }
+
+        if (path == null || path.Count <= 1) return;
+        for (int i = 1; i < path.Count; i++)
+        {
+            Handles.DrawLine(path[i], path[i - 1]);
+        }
     }
     private void PaintCellPathable()
     {
@@ -89,11 +98,28 @@ public class gridmap_inspector : Editor
                     GridmapCell c = Selected.GetCellFromPoint(hitinfo.point);
 
                     if (c == null) return;
-                    if(c.valid == (e.modifiers != EventModifiers.Control)) return;
 
                     Undo.RecordObject(c, "Change cell pathing.");
-                    c.valid = !c.valid;
+                    //if(c.valid == (e.modifiers != EventModifiers.Control)) return;
+
+                    c.valid = (e.modifiers != EventModifiers.Control);//!c.valid;
                     e.Use();
+                }
+            }
+        }
+        else if (e.button == 1)
+        {
+            RaycastHit hitinfo;
+
+            if (Physics.Raycast(HandleUtility.GUIPointToWorldRay(e.mousePosition), out hitinfo, 1000))
+            {
+                if (hitinfo.collider.gameObject.GetComponent<Terrain>() != null)
+                {
+                    GridmapCell c = Selected.GetCellFromPoint(hitinfo.point);
+
+                    if (c == null) return;
+
+                    path = Selected.FindPath(new Vector3(0, 0, 0), c.center, true);
                 }
             }
         }
