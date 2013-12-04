@@ -134,7 +134,6 @@ public class MapInspector : Editor
             {
                 if (hitinfo.collider.gameObject.GetComponent<Tile>() != null)
                 {
-                    //Undo.RegisterUndo(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
 					Undo.RecordObject(hitinfo.collider.gameObject.GetComponent<Tile>(), "set tile pathing type");
 
                     hitinfo.collider.gameObject.GetComponent<Tile>().pathingType = currentPathingType;

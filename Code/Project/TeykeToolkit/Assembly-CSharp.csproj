@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scratchpad\gridmap.cs" />
+     <Compile Include="Assets\Scratchpad\gridmapcell.cs" />
      <Compile Include="Assets\Scripts\Combat\Attack.cs" />
      <Compile Include="Assets\Scripts\Combat\Projectile.cs" />
      <Compile Include="Assets\Scripts\Creep.cs" />

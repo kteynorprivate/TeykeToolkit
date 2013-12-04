@@ -1,0 +1,43 @@
+﻿using UnityEditor;
+using UnityEngine;
+using System.Collections;
+
+namespace Teyke
+{
+    public class GridmapCell : ScriptableObject
+    {
+        public Vector3 center;
+        public float width, depth;
+        public Vector3[] SceneVerts;
+
+        public bool valid;
+
+        private static Vector3[] DefaultQuadVerts = new Vector3[4] {
+        new Vector3(-0.5f, 0, -0.5f),   // all edges length 1
+        new Vector3(-0.5f, 0, 0.5f),
+        new Vector3(0.5f, 0, 0.5f),
+        new Vector3(0.5f, 0, -0.5f)};
+
+        public void Initialize(Vector3 c, float w = 1, float d = 1)
+        {
+            center = c;
+            width = w;
+            depth = d;
+
+            valid = true;
+
+            SetSceneVerts();
+        }
+        public void SetSceneVerts()
+        {
+            if (SceneVerts == null) SceneVerts = new Vector3[4];
+            Vector3 scale = new Vector3(width, 0, depth);
+            for (int i = 0; i < DefaultQuadVerts.Length; i++)
+            {
+                SceneVerts[i] = DefaultQuadVerts[i];
+                SceneVerts[i].Scale(scale);
+                SceneVerts[i] += center;
+            }
+        }
+    }
+}
