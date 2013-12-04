@@ -16,10 +16,15 @@ public class gridmap_inspector : Editor
         }
     }
 
+    bool showInvalidCells;
+
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        
+
+        if (Selected.cells != null)
+            showInvalidCells = GUILayout.Toggle(showInvalidCells, "Show Invalid Cells");
+
         if (GUILayout.Button("Generate Grid"))
         {
             Selected.GenerateGrid();
@@ -34,7 +39,8 @@ public class gridmap_inspector : Editor
         Color c = new Color(0,0,0,0);
         foreach (GridmapCell cell in Selected.cells)
         {
-            Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, c, Color.green);
+            if (cell.valid) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, c, Color.green);
+            else if (showInvalidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, c, Color.red);
         }
     }
 }
