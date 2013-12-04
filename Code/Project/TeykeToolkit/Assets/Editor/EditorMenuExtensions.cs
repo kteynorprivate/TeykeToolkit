@@ -90,7 +90,10 @@ public class NewUnitDialog : EditorWindow
 			GUILayout.FlexibleSpace();
 			EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal(new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+            EditorGUIUtility.labelWidth = 45;
 			attackSpeed = EditorGUILayout.FloatField("Speed", attackSpeed);
+            EditorGUILayout.EndHorizontal();
 
 		}
 
@@ -189,7 +192,10 @@ public class NewStructureDialog : EditorWindow
 			GUILayout.FlexibleSpace();
 			EditorGUILayout.EndHorizontal();
 
-			attackSpeed = EditorGUILayout.FloatField("Speed", attackSpeed);
+            EditorGUILayout.BeginHorizontal(new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+            EditorGUIUtility.labelWidth = 45;
+            attackSpeed = EditorGUILayout.FloatField("Speed", attackSpeed);
+            EditorGUILayout.EndHorizontal();
 		}
 		
 		EditorGUILayout.Space();
