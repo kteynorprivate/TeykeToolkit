@@ -20,8 +20,6 @@ namespace Teyke
         public string[] structuresBuilt;
         public GameUnit UpgradeUnit;
 
-		private List<Vector3> path = new List<Vector3>();
-
         void Start()
         {
 

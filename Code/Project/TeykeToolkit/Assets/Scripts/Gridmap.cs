@@ -5,15 +5,18 @@ using System.Linq;
 
 namespace Teyke
 {
-    public class gridmap : MonoBehaviour
+    public class Gridmap : MonoBehaviour
     {
         public float cellWidth = 1;
         public float cellDepth = 1;
         public float cliffHeight = 0.5f;
 
+        [SerializeField]
         private int countx;
+        [SerializeField]
         private int countz;
 
+        [SerializeField]
         private Vector3 halfCellSize
         {
             get { return new Vector3(cellWidth / 2.0f, 0, cellDepth / 2.0f); }
@@ -57,13 +60,19 @@ namespace Teyke
 
             Terrain terrain = gameObject.GetComponent<Terrain>() as Terrain;
 
+            //if (cells != null)
+            //{
+            //    foreach (GridmapCell c in cells) DestroyImmediate(c);
+            //}
+
             cells = new GridmapCell[countx * countz];
 
             for (int x = 0; x < countx; x++)
             {
                 for (int z = 0; z < countz; z++)
                 {
-                    cells[(x * countz) + z] = ScriptableObject.CreateInstance<GridmapCell>();
+                    //cells[(x * countz) + z] = ScriptableObject.CreateInstance<GridmapCell>();
+                    cells[(x * countz) + z] = new GridmapCell();
                     cells[(x * countz) + z].Initialize(new Vector3(x * cellWidth, 0, z * cellDepth) + halfCellSize + gameObject.transform.position, cellWidth, cellDepth);
                     cells[(x * countz) + z].center.y = terrain.SampleHeight(cells[(x * countz) + z].center);
                     cells[(x * countz) + z].SetSceneVerts();
@@ -110,7 +119,6 @@ namespace Teyke
             int z = (int)((point.z - gameObject.transform.position.z) / cellDepth);
             
             if (x >= countx || x < 0 || z >= countz || z < 0) return null;
-
             return cells[(x * countz) + z];
         }
 
@@ -166,7 +174,7 @@ namespace Teyke
             private static List<AStarRecord> closedList = new List<AStarRecord>();
             private static bool checkValiditiy;
 
-            public static List<Vector3> FindPath(GridmapCell start, GridmapCell end, gridmap map, bool check)
+            public static List<Vector3> FindPath(GridmapCell start, GridmapCell end, Gridmap map, bool check)
             {
                 List<Vector3> path = new List<Vector3>();
                 if (start == null || end == null) return path;

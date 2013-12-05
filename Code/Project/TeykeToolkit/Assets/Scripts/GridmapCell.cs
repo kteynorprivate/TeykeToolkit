@@ -1,10 +1,10 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using System.Collections;
 
 namespace Teyke
 {
-    public class GridmapCell : ScriptableObject
+    [System.Serializable]
+    public class GridmapCell// : ScriptableObject
     {
         public Vector3 center;
         public float width, depth;
