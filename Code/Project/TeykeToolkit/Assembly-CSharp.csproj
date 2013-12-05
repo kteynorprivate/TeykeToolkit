@@ -49,6 +49,8 @@
      <Compile Include="Assets\Scripts\Creep.cs" />
      <Compile Include="Assets\Scripts\CreepManager.cs" />
      <Compile Include="Assets\Scripts\EventSystem\Messenger.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Behaviors\StructureBuilder.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Behaviors\Upgrader.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Combat\Attack.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Combat\Projectile.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameEntities.cs" />
@@ -58,7 +60,6 @@
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\GameUnits\SelectionManager.cs" />
-     <Compile Include="Assets\Scripts\GameUnits\TechTree.cs" />
      <Compile Include="Assets\Scripts\GameUnits\TestUpgrader.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />

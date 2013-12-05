@@ -13,6 +13,14 @@ namespace Teyke
 
         public bool valid;
 
+        public enum CellState
+        {
+            Open,
+            Buildable,
+            Occupied
+        }
+        public CellState state;
+
         public int treeID = 0;
 
         private static Vector3[] DefaultQuadVerts = new Vector3[4] {
