@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +63,7 @@
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\GameUnits\SelectionManager.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\TileBound.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />

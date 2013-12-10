@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Teyke
 {
     [System.Serializable]
-    public class GridmapCell// : ScriptableObject
+    public class GridmapCell
     {
         public Vector3 center;
         public float width, depth;
@@ -19,7 +19,7 @@ namespace Teyke
             Buildable,
             Occupied
         }
-        public CellState state;
+        public CellState state = CellState.Open;
 
         public int treeID = 0;
 
@@ -49,6 +49,21 @@ namespace Teyke
                 SceneVerts[i].Scale(scale);
                 SceneVerts[i] += center;
             }
+        }
+        public void SetSceneVerts(Terrain t)
+        {
+            if (SceneVerts == null) SceneVerts = new Vector3[4];
+            Vector3 scale = new Vector3(width, 1, depth);
+
+            float tl = t.SampleHeight(center + new Vector3(-width / 2.0f, 0, depth / 2.0f));
+            float tr = t.SampleHeight(center + new Vector3(width / 2.0f, 0, depth / 2.0f));
+            float bl = t.SampleHeight(center + new Vector3(-width / 2.0f, 0, -depth / 2.0f));
+            float br = t.SampleHeight(center + new Vector3(width / 2.0f, 0, -depth / 2.0f));
+
+            SceneVerts[0] = center + new Vector3(-width / 2.0f, bl - center.y, -depth / 2.0f);
+            SceneVerts[1] = center + new Vector3(-width / 2.0f, tl - center.y, depth / 2.0f);
+            SceneVerts[2] = center + new Vector3(width / 2.0f, tr - center.y, depth / 2.0f);
+            SceneVerts[3] = center + new Vector3(width / 2.0f, br - center.y, -depth / 2.0f);
         }
 
         public override bool Equals(object o)

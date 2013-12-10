@@ -24,7 +24,7 @@ namespace Teyke
 
         [SerializeField]
         public GridmapCell[] cells;
-        private GridmapCell this[int x, int z]
+        public GridmapCell this[int x, int z]
         {
             get
             {
@@ -60,22 +60,16 @@ namespace Teyke
 
             Terrain terrain = gameObject.GetComponent<Terrain>() as Terrain;
 
-            //if (cells != null)
-            //{
-            //    foreach (GridmapCell c in cells) DestroyImmediate(c);
-            //}
-
             cells = new GridmapCell[countx * countz];
 
             for (int x = 0; x < countx; x++)
             {
                 for (int z = 0; z < countz; z++)
                 {
-                    //cells[(x * countz) + z] = ScriptableObject.CreateInstance<GridmapCell>();
                     cells[(x * countz) + z] = new GridmapCell();
                     cells[(x * countz) + z].Initialize(new Vector3(x * cellWidth, 0, z * cellDepth) + halfCellSize + gameObject.transform.position, cellWidth, cellDepth);
                     cells[(x * countz) + z].center.y = terrain.SampleHeight(cells[(x * countz) + z].center);
-                    cells[(x * countz) + z].SetSceneVerts();
+                    cells[(x * countz) + z].SetSceneVerts(terrain);
                     cells[(x * countz) + z].valid = CellIsSmooth(cells[(x * countz) + z], terrain);
                     cells[(x * countz) + z].x = x;
                     cells[(x * countz) + z].z = z;
