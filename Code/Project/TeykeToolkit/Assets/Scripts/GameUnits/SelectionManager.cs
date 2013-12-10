@@ -2,6 +2,8 @@
 using System.Collections;
 using Teyke;
 
+// TODO: figure out a good way to implement this
+
 public class SelectionManager : MonoBehaviour 
 {
 	GameEntity currentSelection;
@@ -64,12 +66,6 @@ public class SelectionManager : MonoBehaviour
 	}
 	void ShowGameStructureBehaviour()
 	{
-		GameStructure structure = currentSelection as GameStructure;
-		
-		if(structure.UpgradeStructure)
-			if(GUILayout.Button("Upgrade"))
-				structure.Upgrade();
-		if(GUILayout.Button("Destroy"))
-			Destroy(currentSelection.gameObject);
+
 	}
 }

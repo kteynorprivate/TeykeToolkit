@@ -39,17 +39,20 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Creep.cs" />
      <Compile Include="Assets\Scripts\CreepManager.cs" />
      <Compile Include="Assets\Scripts\EventSystem\Messenger.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Behaviors\AutoAttacker.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Behaviors\StructureBuilder.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Behaviors\TargetFollower.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\Behaviors\UnitProducer.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Behaviors\Upgrader.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Combat\Attack.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Combat\Projectile.cs" />
@@ -60,14 +63,12 @@
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialField.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Pathing\PotentialFieldGenerator.cs" />
      <Compile Include="Assets\Scripts\GameUnits\SelectionManager.cs" />
-     <Compile Include="Assets\Scripts\GameUnits\TestUpgrader.cs" />
      <Compile Include="Assets\Scripts\GoalBasedPath.cs" />
      <Compile Include="Assets\Scripts\GoalPathFollower.cs" />
-     <Compile Include="Assets\Scripts\Gridmap.cs" />
-     <Compile Include="Assets\Scripts\GridmapCell.cs" />
      <Compile Include="Assets\Scripts\Map.cs" />
+     <Compile Include="Assets\Scripts\Map\Gridmap.cs" />
+     <Compile Include="Assets\Scripts\Map\GridmapCell.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
-     <Compile Include="Assets\Scripts\Towers\Tower_1.cs" />
      <Compile Include="Assets\Teyke Demos\Dungeon Crawler\playerController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

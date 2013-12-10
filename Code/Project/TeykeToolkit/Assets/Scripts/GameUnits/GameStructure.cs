@@ -3,10 +3,10 @@ using System.Collections;
 
 namespace Teyke
 {
+    // TODO: implement footprint-- allow larger than 1x1 cells for structure placement.
+
     public class GameStructure : GameEntity
     {
-		public GameStructure UpgradeStructure;
-        public string[] unitsProduced;
         public Tile tile;
 
         void Start()
@@ -15,25 +15,5 @@ namespace Teyke
 
             transform.position = tile.transform.position;
         }
-        void Update()
-        {
-
-        }
-
-        public void SetTile(Tile t)
-        {
-            tile = t;
-            transform.position = tile.transform.position;
-        }
-
-		public override void Upgrade()
-		{
-			if (UpgradeStructure == null) return;
-			
-			GameStructure upgrade = Instantiate(UpgradeStructure, transform.position, transform.rotation) as GameStructure;
-			CloneData(upgrade);
-			upgrade.tile = tile;
-			Destroy(gameObject);
-		}
     }
 }

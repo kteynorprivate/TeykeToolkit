@@ -32,8 +32,6 @@ namespace Teyke
                 if(Physics.Raycast(c.ScreenPointToRay(Input.mousePosition), out hitinfo, 120))
                 {
                     path = new Queue<Vector3>(activemap.FindPath(transform.position, hitinfo.point, true));
-
-                    Debug.Log(path.Count);
                 }
             }
 

@@ -31,14 +31,22 @@ namespace Teyke
     public abstract class GameEntity : MonoBehaviour
     {
         public PlayerNumber owner;
-        /// <summary> Current HP value for the unit </summary>
+        /// <summary> 
+        /// Current HP value for the unit 
+        /// </summary>
         public float currentHP;
-        /// <summary> Full HP value for the unit </summary>
+        /// <summary> 
+        /// Full HP value for the unit 
+        /// </summary>
         public float maxHP;
-        /// <summary> Reward a player gets for killing this unit </summary>
+        /// <summary> 
+        /// Reward a player gets for killing this unit 
+        /// </summary>
         public float bounty;
 
-        /// <summary> Determine if the unit's HP is > 0 </summary>
+        /// <summary> 
+        /// Determine if the unit's HP is > 0 
+        /// </summary>
         public bool Alive
         {
             get
@@ -47,16 +55,22 @@ namespace Teyke
             }
         }
 
-        /// <summary> Amount of resource1 it takes to create this unit. </summary>
+        /// <summary> 
+        /// Amount of resource1 it takes to create this unit. 
+        /// </summary>
         public int resource1_cost;
-        /// <summary> Amount of resource2 it takes to create this unit. </summary>        
+        /// <summary> 
+        /// Amount of resource2 it takes to create this unit. 
+        /// </summary>        
         public int resource2_cost;
-        /// <summary> Amount of resource3 it takes to create this unit. </summary>
+        /// <summary> 
+        /// Amount of resource3 it takes to create this unit. 
+        /// </summary>
         public int resource3_cost;
 
-        public abstract void Upgrade();
-
-        /// <summary> Used when upgrading-- copies the current unit's stats to the new one. </summary>
+        /// <summary>
+        /// Used when upgrading-- copies the current unit's stats to the new one. 
+        /// </summary>
         /// <param name="target">the GameEntity that will acquire this one's stats</param>
         public void CloneData(GameEntity target)
         {
@@ -64,23 +78,25 @@ namespace Teyke
             target.currentHP = target.maxHP - (maxHP - currentHP);
         }
 
-        /// <summary> Apply damage to the GameEntity and check whether or not it is still alive. If not, emit it's death signal to the Messenger system. </summary>
+        /// <summary> 
+        /// Apply damage to the GameEntity and check whether or not it is still alive. If not, emit it's death signal to the Messenger system. 
+        /// </summary>
         /// <param name="amount">the amount of damage to apply</param>
         public void ApplyDamage(float amount)
         {
             currentHP -= amount;
 
-            if(!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
+            if (!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
         }
 
         /// <summary> 
         /// Emits a message through the Messenger system when this game entity is clicked. 
         /// Subscribe to anywhere you need to get user selection info.
         /// </summary>
-		public void OnMouseDown()
-		{
-			Messenger<GameEntity>.Invoke("GameEntityPressed", this);
-		}
+        public void OnMouseDown()
+        {
+            Messenger<GameEntity>.Invoke("GameEntityPressed", this);
+        }
     }
 
     /// <summary>
@@ -91,9 +107,13 @@ namespace Teyke
     [Serializable]
     public class GameEntities : ScriptableObject
     {
-        /// <summary> Container for all registered GameUnit types </summary>
+        /// <summary> 
+        /// Container for all registered GameUnit types 
+        /// </summary>
         public Dictionary<string, GameUnit> Units = new Dictionary<string, GameUnit>();
-        /// <summary> Container for all registered GameStructure types </summary>
+        /// <summary> 
+        /// Container for all registered GameStructure types 
+        /// </summary>
         public Dictionary<string, GameStructure> Structures = new Dictionary<string, GameStructure>();
 
         public void OnEnable() { hideFlags = HideFlags.HideAndDontSave; }
@@ -106,7 +126,7 @@ namespace Teyke
             if (instance == null)
                 instance = ScriptableObject.FindObjectOfType<GameEntities>();
             if (instance == null)
-				instance = ScriptableObject.CreateInstance<GameEntities> ();
+                instance = ScriptableObject.CreateInstance<GameEntities>();
             return instance;
         }
 

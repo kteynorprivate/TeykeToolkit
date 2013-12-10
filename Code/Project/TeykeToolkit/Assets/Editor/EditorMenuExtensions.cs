@@ -44,6 +44,169 @@ public class NewMapDialog : EditorWindow
 	}
 }
 
+public class CreateGameUnitDialog : EditorWindow
+{
+    string unitName;
+
+    // GameEntity fields
+    int maxHP;
+    int resourceCost;
+
+    // attack fields
+    bool hasAttack;
+    bool autoAttack;
+    Attack attack;
+
+    // structure builder
+    bool buildsStructures;
+
+    // unit producer
+    bool producesUnits;
+
+    // upgradable
+    bool hasUpgrade;
+
+    [MenuItem("Teyke/Define Game Entity")]
+    public static void DefineUnit()
+    {
+        var window = EditorWindow.GetWindow<CreateGameUnitDialog>(true, "New Game Entity");
+        window.minSize = new Vector2(300, 320);
+        window.unitName = "new_unit";
+        window.maxHP = 10;
+        window.resourceCost = 0;
+        window.hasAttack = false;
+        window.autoAttack = false;
+        window.attack = new Attack();
+        window.buildsStructures = false;
+        window.producesUnits = false;
+        window.hasUpgrade = false;
+    }
+
+    void OnGUI()
+    {
+        EditorGUIUtility.labelWidth = 70;
+
+        unitName = EditorGUILayout.TextField("Name", unitName.Replace(" ", ""));
+        maxHP = EditorGUILayout.IntField("Max HP", maxHP);
+        resourceCost = EditorGUILayout.IntField("Cost", resourceCost);
+
+        #region Behaviors
+        hasAttack = EditorGUILayout.ToggleLeft("Has Attack", hasAttack);
+        if (hasAttack)
+        {
+            EditorGUIUtility.labelWidth = 35;
+
+            autoAttack = EditorGUILayout.ToggleLeft("Auto attack", autoAttack, new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+
+            EditorGUILayout.BeginHorizontal(new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+            EditorGUILayout.LabelField("Damage", GUILayout.Width(60), GUILayout.ExpandWidth(false));
+            attack.minDamage = EditorGUILayout.FloatField("Min", attack.minDamage);
+            attack.maxDamage = EditorGUILayout.FloatField("Max", attack.maxDamage);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal(new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+            EditorGUILayout.LabelField("Range", GUILayout.Width(60), GUILayout.ExpandWidth(false));
+            attack.minRange = EditorGUILayout.FloatField("Min", attack.minRange);
+            attack.maxRange = EditorGUILayout.FloatField("Max", attack.maxRange);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.BeginHorizontal(new GUIStyle() { margin = new RectOffset(15, 0, 0, 0) });
+            EditorGUIUtility.labelWidth = 45;
+            attack.attackSpeed = EditorGUILayout.FloatField("Speed", attack.attackSpeed);
+            EditorGUILayout.EndHorizontal();
+        }
+
+        buildsStructures = EditorGUILayout.ToggleLeft("Builds Structures", buildsStructures);
+        if (buildsStructures)
+        {
+            // todo: allow user to define which structures 
+        }
+
+        producesUnits = EditorGUILayout.ToggleLeft("Produces Units", producesUnits);
+        if (producesUnits)
+        {
+            // todo: allow user to define which units
+        }
+
+        hasUpgrade = EditorGUILayout.ToggleLeft("Has Upgrade", hasUpgrade);
+        if(hasUpgrade)
+        {
+            // todo: allow user to define what it upgrades into
+        }
+        #endregion
+
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Create"))
+        {
+            if (string.IsNullOrEmpty(unitName))
+            {
+                EditorUtility.DisplayDialog("Error", "The unit needs to have a name.", "Ok");
+                return;
+            }
+
+            string unitPath = "Assets/GameEntities/Units/" + unitName + ".prefab";
+            if (Resources.LoadAssetAtPath<Object>(unitPath))
+            {
+                if (EditorUtility.DisplayDialog("Warning", "A prefab with that name already exists. Do you want to overwrite it?", "Yes", "No"))
+                {
+                    CreateUnitPrefab(unitPath);
+                }
+            }
+            else CreateUnitPrefab(unitPath);
+
+            this.Close();
+        }
+
+    }
+
+    void CreateUnitPrefab(string path)
+    {
+        GameObject newUnit = new GameObject(unitName);
+        GameUnit unit = newUnit.AddComponent<GameUnit>();
+        unit.maxHP = maxHP;
+
+        var collider = newUnit.AddComponent<CapsuleCollider>();
+        collider.radius = 1;
+
+        var renderer = newUnit.AddComponent<MeshRenderer>();
+
+        var mesh = newUnit.AddComponent<MeshFilter>();
+        //mesh.mesh = PrimitiveType.Capsule;
+        // set the mesh filter's mesh to a default one (capsule).
+
+        #region Add Components
+        if (hasAttack)
+        {
+            var atk = newUnit.AddComponent<Attack>();
+            atk = attack;
+
+            if (autoAttack)
+            {
+                newUnit.AddComponent<AutoAttacker>();
+            }
+        }
+
+        if (buildsStructures)
+        {
+            newUnit.AddComponent<StructureBuilder>();
+        }
+        if (producesUnits)
+        {
+            newUnit.AddComponent<UnitProducer>();
+        }
+        #endregion
+
+        if (!Directory.Exists(Application.dataPath + "/GameEntities"))
+            AssetDatabase.CreateFolder("Assets", "GameEntities");
+        if (!Directory.Exists(Application.dataPath + "/GameEntities/Units"))
+            AssetDatabase.CreateFolder("Assets/GameEntities", "Units");
+        PrefabUtility.CreatePrefab(path, newUnit);
+        DestroyImmediate(newUnit);
+    }
+}
+
 public class NewUnitDialog : EditorWindow
 {
 	string unitName;
