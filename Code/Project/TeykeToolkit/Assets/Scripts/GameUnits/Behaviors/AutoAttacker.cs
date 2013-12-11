@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AutoAttacker : MonoBehaviour 
+namespace Teyke
 {
-    private Attack attack;
-
-    void Start()
+    public class AutoAttacker : MonoBehaviour
     {
-        attack = gameObject.GetComponent<Attack>() as Attack;
+        private Attack attack;
+
+        void Start()
+        {
+            attack = gameObject.GetComponent<Attack>() as Attack;
+        }
+
+        void Update()
+        {
+
+        }
     }
-
-	void Update () 
-    {
-        
-	}
 }

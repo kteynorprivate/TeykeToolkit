@@ -13,8 +13,8 @@ namespace Teyke
         // Use this for initialization
         void Start()
         {
-            Messenger<GameEntity>.RegisterListener("GameEntityPressed", x => { currentSelection = x; Debug.Log("new selection"); });
-            Messenger<Gridmap>.RegisterListener("MapPressed", t => { currentSelection = null; Debug.Log("no selection"); });
+            Messenger<GameEntity>.RegisterListener("GameEntityPressed", x => { currentSelection = x; });
+            Messenger<Gridmap>.RegisterListener("MapPressed", t => { currentSelection = null; });
         }
 
         void OnGUI()

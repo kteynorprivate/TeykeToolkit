@@ -164,7 +164,7 @@ public class NewUnitDialog : EditorWindow
     void CreateUnitPrefab(string path)
     {
         GameObject newUnit = new GameObject(unitName);
-        GameUnit unit = newUnit.AddComponent<GameUnit>();
+        GameEntity unit = newUnit.AddComponent<GameEntity>();
         unit.maxHP = maxHP;
         unit.currentHP = maxHP;
 
@@ -343,7 +343,7 @@ public class NewStructureDialog : EditorWindow
     void CreateUnitPrefab(string path)
     {
         GameObject newStructure = new GameObject(unitName);
-        GameUnit unit = newStructure.AddComponent<GameUnit>();
+        GameEntity unit = newStructure.AddComponent<GameEntity>();
         unit.maxHP = maxHP;
         unit.currentHP = maxHP;
 

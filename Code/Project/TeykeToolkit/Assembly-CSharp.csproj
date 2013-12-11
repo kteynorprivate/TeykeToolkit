@@ -39,15 +39,16 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Creep.cs" />
      <Compile Include="Assets\Scripts\CreepManager.cs" />
+     <Compile Include="Assets\Scripts\CreepSpawner.cs" />
      <Compile Include="Assets\Scripts\EventSystem\Messenger.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Behaviors\AutoAttacker.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Behaviors\StructureBuilder.cs" />
@@ -71,6 +72,7 @@
      <Compile Include="Assets\Scripts\Map\GridmapCell.cs" />
      <Compile Include="Assets\Scripts\Tile.cs" />
      <Compile Include="Assets\Teyke Demos\Dungeon Crawler\playerController.cs" />
+     <Compile Include="Assets\Teyke Demos\Tower Defense\TowerBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

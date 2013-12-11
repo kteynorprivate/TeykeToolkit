@@ -35,7 +35,7 @@ namespace Teyke
 
         public void OnMouseDown()
         {
-            Messenger<Gridmap>.Invoke("MapPressed", this);
+            Messenger<Gridmap>.Invoke("MapPressed", this);        
         }
         
 

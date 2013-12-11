@@ -28,7 +28,7 @@ namespace Teyke
     /// <summary>
     /// Base class for Teyke game units/structures. 
     /// </summary>
-    public abstract class GameEntity : MonoBehaviour
+    public class GameEntity : MonoBehaviour
     {
         /// <summary>
         /// The name of the GameEntity type
@@ -76,6 +76,11 @@ namespace Teyke
         /// </summary>
         public int resource3_cost;
 
+        void Start()
+        {
+            Attack.RegisterAttackableUnit(this);
+        }
+
         /// <summary>
         /// Used when upgrading-- copies the current unit's stats to the new one. 
         /// </summary>
@@ -94,7 +99,12 @@ namespace Teyke
         {
             currentHP -= amount;
 
-            if (!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
+            if (!Alive)
+            {
+                Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
+                Attack.UnregisterAttackableUnit(this);
+                Destroy(gameObject);
+            }
         }
 
         public void ShowControlGUI()

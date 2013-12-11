@@ -80,9 +80,7 @@ namespace Teyke
 
             occupiedTiles = new GridmapCell[footprintX * footprintZ];
             cells.CopyTo(occupiedTiles, 0);
-
-            Debug.Log(cells.Length);
-
+            
             for (int i = 0; i < footprintX * footprintZ; i++)
                 occupiedTiles[i].state = GridmapCell.CellState.Occupied;
 

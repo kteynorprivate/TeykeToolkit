@@ -27,7 +27,7 @@ namespace Teyke
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            //base.OnInspectorGUI();
             bool requestRepaint = false;
 
             Selected.cellWidth = EditorGUILayout.FloatField("Cell Width", Selected.cellWidth);

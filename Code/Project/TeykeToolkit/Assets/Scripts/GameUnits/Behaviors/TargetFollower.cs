@@ -30,10 +30,10 @@ namespace Teyke
 
         private void FollowPath()
         {
-            if (path.Count == 0) return;
+            if (path == null || path.Count == 0) return;
 
             gameObject.transform.LookAt(path.Peek());
-            gameObject.transform.Translate(Vector3.forward * MoveSpeed);
+            gameObject.transform.Translate(Vector3.forward * MoveSpeed * Time.deltaTime);
 
             if ((transform.position - path.Peek()).sqrMagnitude <= nodeRangeSqr)
             {
@@ -43,10 +43,21 @@ namespace Teyke
 
         private void Repath()
         {
+            timeout = repathTimeout;
+            
             if (target == null) return;
             
             path = new Queue<Vector3>(activemap.FindPath(transform.position, target.position, true));
-            timeout = repathTimeout;
+            
+        }
+
+        public void SetPath(Queue<Vector3> p)
+        {
+            path = p;
+        }
+        public void SetTimeout(float t)
+        {
+            timeout = t;
         }
     }
 }
