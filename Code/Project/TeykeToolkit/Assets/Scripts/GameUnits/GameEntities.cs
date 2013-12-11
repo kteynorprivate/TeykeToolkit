@@ -30,6 +30,14 @@ namespace Teyke
     /// </summary>
     public abstract class GameEntity : MonoBehaviour
     {
+        /// <summary>
+        /// The name of the GameEntity type
+        /// </summary>
+        public string TypeName;
+
+        /// <summary>
+        /// The ID of the owning player
+        /// </summary>
         public PlayerNumber owner;
         /// <summary> 
         /// Current HP value for the unit 
@@ -87,6 +95,39 @@ namespace Teyke
             currentHP -= amount;
 
             if (!Alive) Messenger<GameEntity, float>.Invoke("UnitDied", this, bounty);
+        }
+
+        public void ShowControlGUI()
+        {
+            // TODO: Make this more extensible. Allow other components to inject their GUI code without having to do anything weird.
+
+            GUILayout.BeginArea(new Rect(0, Screen.height - 200, 200, 200));
+
+            Upgrader upgrader = gameObject.GetComponent<Upgrader>();
+            if(upgrader != null)
+            {
+                if(GUILayout.Button("Upgrade: " + upgrader.UpgradeType.resource1_cost))
+                    upgrader.Upgrade();
+            }
+
+            UnitProducer producer = gameObject.GetComponent<UnitProducer>();
+            if (producer != null)
+            {
+                // Todo: implement. expose each target unit produced in the script, iterate over each here, and pass the clicked one back to the script.
+            }
+
+            StructureBuilder builder = gameObject.GetComponent<StructureBuilder>();
+            if (builder != null)
+            {
+                for (int i = 0; i < builder.StructuresBuilt.Length; i++)
+                {
+                    // TODO: find a way to redirect the next vector3 from the selection manager to the StructureBuilder (USE MESSENGER)
+                    //if(GUILayout.Button(builder.StructuresBuilt[i].TypeName))
+                        //builder.BuildStructure(
+                }
+            }
+
+            GUILayout.EndArea();
         }
 
         /// <summary> 

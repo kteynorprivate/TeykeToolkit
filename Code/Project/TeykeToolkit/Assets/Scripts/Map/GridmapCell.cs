@@ -15,11 +15,11 @@ namespace Teyke
 
         public enum CellState
         {
-            Open,
+            Unbuildable,
             Buildable,
             Occupied
         }
-        public CellState state = CellState.Open;
+        public CellState state = CellState.Buildable;
 
         public int treeID = 0;
 

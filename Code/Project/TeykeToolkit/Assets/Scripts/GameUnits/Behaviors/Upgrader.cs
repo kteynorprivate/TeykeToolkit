@@ -3,10 +3,9 @@ using System.Collections;
 
 namespace Teyke
 {
-    public class Upgrader<T> : MonoBehaviour 
-        where T : GameEntity
+    public class Upgrader: MonoBehaviour 
     {
-        public T UpgradeType;
+        public GameEntity UpgradeType;
 
         /// <summary>
         /// Upgrades the current unit to the defined upgrade type.
@@ -17,8 +16,8 @@ namespace Teyke
         {
             if (UpgradeType == null) return;
 
-            T current = gameObject.GetComponent<T>();
-            T upgrade = Instantiate(UpgradeType, transform.position, transform.rotation) as T;
+            GameEntity current = gameObject.GetComponent<GameEntity>();
+            GameEntity upgrade = Instantiate(UpgradeType, transform.position, transform.rotation) as GameEntity;
             current.CloneData(upgrade);
             Destroy(gameObject);
         }

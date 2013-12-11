@@ -33,15 +33,11 @@ namespace Teyke
             }
         }
 
-        // Use this for initialization
-        void Start()
+        public void OnMouseDown()
         {
+            Messenger<Gridmap>.Invoke("MapPressed", this);
         }
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
+        
 
         public void GenerateGrid()
         {
@@ -49,8 +45,6 @@ namespace Teyke
                 GenerateGrid_Terrain();
 
             else return;
-
-
         }
 
         private void GenerateGrid_Terrain()
@@ -71,6 +65,7 @@ namespace Teyke
                     cells[(x * countz) + z].center.y = terrain.SampleHeight(cells[(x * countz) + z].center);
                     cells[(x * countz) + z].SetSceneVerts(terrain);
                     cells[(x * countz) + z].valid = CellIsSmooth(cells[(x * countz) + z], terrain);
+                    cells[(x * countz) + z].state = cells[(x * countz) + z].valid ? GridmapCell.CellState.Buildable : GridmapCell.CellState.Unbuildable;
                     cells[(x * countz) + z].x = x;
                     cells[(x * countz) + z].z = z;
                 }

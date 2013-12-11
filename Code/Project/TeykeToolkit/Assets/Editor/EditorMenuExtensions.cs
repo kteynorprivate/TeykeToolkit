@@ -69,7 +69,7 @@ public class NewUnitDialog : EditorWindow
     [MenuItem("Teyke/New Unit Type", false, 12)]
     public static void DefineUnit()
     {
-        var window = EditorWindow.GetWindow<NewUnitDialog>(true, "New Game Unit");
+        var window = EditorWindow.GetWindow<NewUnitDialog>(true, "New Unit Type");
         window.minSize = new Vector2(300, 320);
         window.unitName = "new_unit";
         window.maxHP = 10;
@@ -208,6 +208,10 @@ public class NewUnitDialog : EditorWindow
         {
             newUnit.AddComponent<UnitProducer>();
         }
+        if (hasUpgrade)
+        {
+            newUnit.AddComponent<Upgrader>();
+        }
         #endregion
 
         if (!Directory.Exists(Application.dataPath + "/GameEntities"))
@@ -244,7 +248,7 @@ public class NewStructureDialog : EditorWindow
     [MenuItem("Teyke/New Structure Type", false, 12)]
     public static void DefineUnit()
     {
-        var window = EditorWindow.GetWindow<NewStructureDialog>(true, "New Game Unit");
+        var window = EditorWindow.GetWindow<NewStructureDialog>(true, "New Structure Type");
         window.minSize = new Vector2(300, 320);
         window.unitName = "new_unit";
         window.maxHP = 10;
@@ -386,6 +390,10 @@ public class NewStructureDialog : EditorWindow
         if (producesUnits)
         {
             newStructure.AddComponent<UnitProducer>();
+        }
+        if (hasUpgrade)
+        {
+            newStructure.AddComponent<Upgrader>();
         }
         #endregion
 

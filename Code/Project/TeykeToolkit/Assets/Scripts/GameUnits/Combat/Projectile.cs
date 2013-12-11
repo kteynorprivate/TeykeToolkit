@@ -15,7 +15,7 @@ namespace Teyke
 	
 		void Start () 
 		{
-	
+
 		}
 	
 		public void Fire(GameEntity t, float d)
@@ -40,7 +40,7 @@ namespace Teyke
 			if (dst < radius * 2 || dst > 10000) 	// TODO: fix this magic number. find a better way to check if the target is borked.
 			{
 				// projectile hit
-				target.ApplyDamage(damage);
+				if(target != null) target.ApplyDamage(damage);
 				Destroy(this.gameObject);
 			}
 		}
