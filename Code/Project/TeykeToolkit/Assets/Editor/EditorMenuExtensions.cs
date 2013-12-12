@@ -7,7 +7,14 @@ using System.IO;
 public class NewMapDialog : EditorWindow
 {
 	static bool isVisible;
-	static bool showMapOverwriteWarning;
+
+    static int cellWidth = 1;
+    static int cellDepth = 1;
+    static float cliffLevel = 0.5f;
+
+    static int tWidth;
+    static int tHeight;
+    static int tDepth;
 	
 	[MenuItem("Teyke/Create Map", false, 0)]
 	static void CreateMap ()
@@ -16,32 +23,44 @@ public class NewMapDialog : EditorWindow
 			return;  // dont allow a second dialog to be opened.
 		
 		NewMapDialog window = ScriptableObject.CreateInstance<NewMapDialog> ();
-		window.position = new Rect (Screen.width / 2, Screen.height / 2, 250, 100);
+		window.position = new Rect (Screen.width / 2, Screen.height / 2, 250, 200);
 		window.ShowPopup ();
-		showMapOverwriteWarning = Map.ExistsInScene;
+		//showMapOverwriteWarning = Map.ExistsInScene;
 		isVisible = true;
 	}
-	
-	void OnGUI ()
-	{
-		int width = EditorGUILayout.IntSlider ("Width: ", 16, 1, 64);
-		int height = EditorGUILayout.IntSlider ("Height: ", 16, 1, 64);
-		
-		if (showMapOverwriteWarning) {
-			EditorGUILayout.LabelField ("Warning: A map object has already been created. Creating a new one will overwrite the existing one.");
-		}
-		
-		if (GUILayout.Button ("Create")) {
-			GameObject map = new GameObject ("map");
-			map.AddComponent<Map> ();
-			map.GetComponent<Map> ().GenerateMap (width, height);
-			isVisible = false;
-			this.Close ();
-		} else if (GUILayout.Button ("Cancel")) {
-			isVisible = false;
-			this.Close ();
-		}
-	}
+
+    void OnGUI()
+    {
+        tWidth = EditorGUILayout.IntField("Terrain Width", tWidth);
+        tHeight = EditorGUILayout.IntField("Terrain Height", tHeight);
+        tDepth = EditorGUILayout.IntField("Terrain Depth", tDepth);
+
+        EditorGUILayout.Separator();
+
+        cellWidth = EditorGUILayout.IntSlider("Cell Width", cellWidth, 1, 512);
+        cellDepth = EditorGUILayout.IntSlider("Cell Depth", cellDepth, 1, 512);
+        cliffLevel = EditorGUILayout.FloatField("Cliff Height", cliffLevel);
+
+        EditorGUILayout.Separator();
+
+        if (GUILayout.Button("Create"))
+        {
+            TerrainData terData = new TerrainData() { size = new Vector3(tWidth, tHeight, tDepth), name = "Map Terrain", heightmapResolution = 512, baseMapResolution = 1024 };
+            GameObject ter = Terrain.CreateTerrainGameObject(terData);
+            ter.name = "Map";
+            Gridmap gmap = ter.AddComponent<Gridmap>();
+            gmap.cellWidth = cellWidth;
+            gmap.cellDepth = cellDepth;
+            gmap.cliffHeight = cliffLevel;
+            isVisible = false;
+            this.Close();
+        }
+        else if (GUILayout.Button("Cancel"))
+        {
+            isVisible = false;
+            this.Close();
+        }
+    }
 }
 
 public class NewUnitDialog : EditorWindow

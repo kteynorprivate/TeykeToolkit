@@ -24,7 +24,7 @@ namespace Teyke
 
         void OnGUI()
         {
-            if (selected == null) return;
+            if (selected == null || selected.state != GridmapCell.CellState.Buildable) return;
 
             DrawBuildGUI();
             DrawOutline();
@@ -39,8 +39,10 @@ namespace Teyke
                 if (GUILayout.Button("Build " + towers[i].TypeName))
                 {
                     Debug.Log("Building " + towers[i].TypeName);
-                    GameObject tower = Instantiate(towers[i], selected.center, Quaternion.identity) as GameObject;
+                    GameEntity tower = Instantiate(towers[i], selected.center, Quaternion.identity) as GameEntity;
+                    tower.GetComponent<TileBound>().map = Component.FindObjectOfType<Gridmap>();
                     tower.GetComponent<TileBound>().SetPosition(selected.center);
+
                 }
             }
             GUILayout.EndArea();

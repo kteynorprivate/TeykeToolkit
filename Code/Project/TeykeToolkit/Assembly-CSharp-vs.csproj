@@ -39,10 +39,10 @@
 	<Reference Include="System.Core" />
 	<Reference Include="System.Xml.Linq" />
 	<Reference Include="UnityEngine">
-	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>D:/Programs/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\GameUnits\Combat\Attack.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Combat\Projectile.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameEntities.cs" />
+     <Compile Include="Assets\Scripts\GameUnits\GameEntity.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameStructure.cs" />
      <Compile Include="Assets\Scripts\GameUnits\GameUnit.cs" />
      <Compile Include="Assets\Scripts\GameUnits\Pathing\AStarPathfinder.cs" />
