@@ -73,8 +73,8 @@ namespace Teyke
             foreach (GridmapCell cell in Selected.cells)
             {
                 if (cell == null) continue;
-                if (cell.valid && showValidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.green + c, Color.green);
-                else if (!cell.valid && showInvalidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.red + c, Color.red);
+                if (cell.Valid && showValidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.green + c, Color.green);
+                else if (!cell.Valid && showInvalidCells) Handles.DrawSolidRectangleWithOutline(cell.SceneVerts, Color.red + c, Color.red);
             }
         }
         private void PaintCellPathable()
@@ -99,7 +99,7 @@ namespace Teyke
                         if (c == null) return;
 
                         //Undo.RecordObject(c, "Change cell pathing.");
-                        c.valid = (e.modifiers != EventModifiers.Control);
+                        c.Valid = (e.modifiers != EventModifiers.Control);
                         e.Use();
                     }
                 }

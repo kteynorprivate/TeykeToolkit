@@ -64,8 +64,8 @@ namespace Teyke
                     cells[(x * countz) + z].Initialize(new Vector3(x * cellWidth, 0, z * cellDepth) + halfCellSize + gameObject.transform.position, cellWidth, cellDepth);
                     cells[(x * countz) + z].center.y = terrain.SampleHeight(cells[(x * countz) + z].center);
                     cells[(x * countz) + z].SetSceneVerts(terrain);
-                    cells[(x * countz) + z].valid = CellIsSmooth(cells[(x * countz) + z], terrain);
-                    cells[(x * countz) + z].state = cells[(x * countz) + z].valid ? GridmapCell.CellState.Buildable : GridmapCell.CellState.Unbuildable;
+                    cells[(x * countz) + z].Valid = CellIsSmooth(cells[(x * countz) + z], terrain);
+                    cells[(x * countz) + z].state = cells[(x * countz) + z].Valid ? GridmapCell.CellState.Buildable : GridmapCell.CellState.Unbuildable;
                     cells[(x * countz) + z].x = x;
                     cells[(x * countz) + z].z = z;
                 }
@@ -193,6 +193,7 @@ namespace Teyke
                     closedList.Add(current);
                     openList.RemoveAt(0);
 
+                    // TODO: Don't sort, just cache the index of the lowest cost (n instead of nlogn)
                     openList.Sort((l1, l2) => l1.estimatedFinalCost.CompareTo(l2.estimatedFinalCost));
                 }
 
@@ -210,7 +211,7 @@ namespace Teyke
             private static bool PlaceInCorrectList(GridmapCell cell, AStarRecord parent, float cost)
             {
                 if (cell == null) return false;
-                if (!cell.valid && checkValiditiy) return false;
+                if (!cell.Valid && checkValiditiy) return false;
 
                 AStarRecord olinstance = openList.FirstOrDefault(r => r.cell.Equals(cell));
                 if (olinstance != null)  // it's on the open list.

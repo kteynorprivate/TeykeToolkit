@@ -11,7 +11,20 @@ namespace Teyke
         public Vector3[] SceneVerts;
         public int x, z;
 
-        public bool valid;
+        [SerializeField]
+        private bool valid;
+        public bool Valid
+        {
+            get
+            {
+                return valid;
+            }
+            set
+            {
+                valid = value;
+                Messenger.Invoke("GridmapCellValidityChanged");
+            }
+        }
 
         public enum CellState
         {
@@ -35,7 +48,7 @@ namespace Teyke
             width = w;
             depth = d;
 
-            valid = true;
+            Valid = true;
 
             SetSceneVerts();
         }

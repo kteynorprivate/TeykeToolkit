@@ -44,7 +44,7 @@ namespace Teyke
 
             if (creepMovement != null && creepTarget != null)
             {
-                creepMovement.SetPath(creepPath);
+                //creepMovement.SetPath(creepPath);
                 creepMovement.target = creepTarget;
             }
         }
